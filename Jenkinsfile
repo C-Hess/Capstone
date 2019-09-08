@@ -15,7 +15,7 @@ pipeline {
         }
         stage('unity-tests') {
             agent {
-                docker { image 'gableroux/unity3d:2019.2.4f1' }
+                docker { image 4f1' }
             }
             steps {
 		sh 'unity -runTests -projectPath unity/ -testResults /dev/null -testPlatform StandaloneWindows -batchmode -nographics'
