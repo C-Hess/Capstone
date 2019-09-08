@@ -18,7 +18,7 @@ pipeline {
                 docker { image 'gableroux/unity3d' }
             }
             steps {
-		sh 'unity -runTests -projectPath unity/ -testResults /dev/null -testPlatform StandaloneWindows -batchmode -nographics'
+		sh '/opt/Unity/Editor/Unity -runTests -projectPath unity/ -testResults /dev/null -testPlatform StandaloneWindows -batchmode -nographics'
             }
         }
     }
