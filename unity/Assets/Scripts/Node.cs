@@ -90,15 +90,15 @@ public class GameState : MonoBehaviour
         System.Random rnd = new System.Random();
         levelNumber = level;
         wires = new List<Wire>();
-        List<string> colors = { "Red", "Green", "Blue" };
+        string[] colors = { "Red", "Green", "Blue" };
         for(int i=0;i<15;i++)
         {
-            wires[i] = new Wire(colors[rnd.Next(colors.Count)]);
+            wires[i] = new Wire(colors[rnd.Next(3)]);
         }
 
         FirstLevel FL = new FirstLevel();
-        currentPosition = FL.dfa[0];
-        endNode = FL.dfa[6];
+        currentPosition = FL.Dfa[0];
+        endNode = FL.Dfa[6];
     }
     
     public void Traverse(Wire wire)
@@ -142,40 +142,41 @@ public class FirstLevel: MonoBehaviour
     List<Edge> edgeList;
     public FirstLevel()
     {
-        dfa = new List<Node>();
+        Dfa = new List<Node>();
         for (int i = 0; i < 7; i++)
         {
-            dfa[i] = new Node();
+            Dfa[i] = new Node();
         }
         edgeList = new List<Edge>();
-        edgeList[0] = new Edge(dfa[0], "Red", dfa[1]);
-        edgeList[1] = new Edge(dfa[0], "Blue", dfa[2]);
+        edgeList[0] = new Edge(Dfa[0], "Red", Dfa[1]);
+        edgeList[1] = new Edge(Dfa[0], "Blue", Dfa[2]);
 
-        edgeList[2] = new Edge(dfa[1], "Blue", dfa[3]);
+        edgeList[2] = new Edge(Dfa[1], "Blue", Dfa[3]);
 
-        edgeList[3] = new Edge(dfa[2], "Red", dfa[4]);
+        edgeList[3] = new Edge(Dfa[2], "Red", Dfa[4]);
 
-        edgeList[4] = new Edge(dfa[3], "Red", dfa[5]);
-        edgeList[5] = new Edge(dfa[3], "Green", dfa[2]);
+        edgeList[4] = new Edge(Dfa[3], "Red", Dfa[5]);
+        edgeList[5] = new Edge(Dfa[3], "Green", Dfa[2]);
 
-        edgeList[6] = new Edge(dfa[4], "Blue", dfa[5]);
-        edgeList[7] = new Edge(dfa[4], "Green", dfa[1]);
+        edgeList[6] = new Edge(Dfa[4], "Blue", Dfa[5]);
+        edgeList[7] = new Edge(Dfa[4], "Green", Dfa[1]);
 
-        edgeList[8] = new Edge(dfa[5], "Red", dfa[5]);
-        edgeList[9] = new Edge(dfa[5], "Blue", dfa[2]);
-        edgeList[10] = new Edge(dfa[5], "Green", dfa[6]);
+        edgeList[8] = new Edge(Dfa[5], "Red", Dfa[5]);
+        edgeList[9] = new Edge(Dfa[5], "Blue", Dfa[2]);
+        edgeList[10] = new Edge(Dfa[5], "Green", Dfa[6]);
 
-        edgeList[11] = new Edge(dfa[6], "Red", dfa[6]);
-        edgeList[12] = new Edge(dfa[6], "Blue", dfa[6]);
-        edgeList[13] = new Edge(dfa[6], "Green", dfa[6]);
+        edgeList[11] = new Edge(Dfa[6], "Red", Dfa[6]);
+        edgeList[12] = new Edge(Dfa[6], "Blue", Dfa[6]);
+        edgeList[13] = new Edge(Dfa[6], "Green", Dfa[6]);
 
-        dfa[0].Edges = edgeList.GetRange(0, 2);
-        dfa[1].Edges = edgeList.GetRange(2, 1);
-        dfa[2].Edges = edgeList.GetRange(3, 1);
-        dfa[3].Edges = edgeList.GetRange(4, 2);
-        dfa[4].Edges = edgeList.GetRange(6, 2);
-        dfa[5].Edges = edgeList.GetRange(8, 3);
-        dfa[6].Edges = edgeList.GetRange(11, 3);
+        Dfa[0].Edges = edgeList.GetRange(0, 2);
+        Dfa[1].Edges = edgeList.GetRange(2, 1);
+        Dfa[2].Edges = edgeList.GetRange(3, 1);
+        Dfa[3].Edges = edgeList.GetRange(4, 2);
+        Dfa[4].Edges = edgeList.GetRange(6, 2);
+        Dfa[5].Edges = edgeList.GetRange(8, 3);
+        Dfa[6].Edges = edgeList.GetRange(11, 3);
     }
 
+    public List<Node> Dfa { get => dfa; set => dfa = value; }
 }
