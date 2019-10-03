@@ -11,6 +11,8 @@ public class GameManager1 : MonoBehaviour
     public double levelDiff = 1.0;
     public int levelNumber = 1;
     public int score = 0;
+    public List<GameObject> wires;
+
 
     public void GameOver()
     {
