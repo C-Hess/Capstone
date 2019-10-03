@@ -91,6 +91,30 @@ ModelImporter:
     7400066: Cylinder.003|Cube.005Action
     7400068: Cylinder.003|Cube.007Action
     7400070: Cylinder.003|Cylinder.003Action
+    7400072: Cube.002|Cube.002Action.001
+    7400074: Cube.002|Cube.002Action.002
+    7400076: Cube.002|Cube.003Action.001
+    7400078: Cube.002|Cube.005Action.001
+    7400080: Cube.002|Cylinder.003Action.001
+    7400082: Cube.002|Cylinder.003Action.002
+    7400084: Cube.005|Cube.002Action.001
+    7400086: Cube.005|Cube.002Action.002
+    7400088: Cube.005|Cube.003Action.001
+    7400090: Cube.005|Cube.005Action.001
+    7400092: Cube.005|Cylinder.003Action.001
+    7400094: Cube.005|Cylinder.003Action.002
+    7400096: Cube.003|Cube.002Action.001
+    7400098: Cube.003|Cube.002Action.002
+    7400100: Cube.003|Cube.003Action.001
+    7400102: Cube.003|Cube.005Action.001
+    7400104: Cube.003|Cylinder.003Action.001
+    7400106: Cube.003|Cylinder.003Action.002
+    7400108: Cylinder.003|Cube.002Action.001
+    7400110: Cylinder.003|Cube.002Action.002
+    7400112: Cylinder.003|Cube.003Action.001
+    7400114: Cylinder.003|Cube.005Action.001
+    7400116: Cylinder.003|Cylinder.003Action.001
+    7400118: Cylinder.003|Cylinder.003Action.002
     9500000: //RootNode
     10800000: Light
     10800002: Light.001
