@@ -1,37 +1,51 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private string selectableTag = "Selectable";
-    [SerializeField] private Material highlightMaterial;
-    [SerializeField] private Material defaultMaterial;
+    
+
+    private ISelectionResponse _selectionResponse;
 
     private Transform _selection;
-    // Update is called once per frame
-    void Update()
+
+    private void Awake()
     {
+        _selectionResponse = GetComponent<ISelectionResponse>();
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        // selection and deselection response
         if (_selection != null)
         {
-            var selectionRenderer = _selection.GetComponent<Renderer>();
-            selectionRenderer.material = defaultMaterial;
-            _selection = null;
+
+            _selectionResponse.OnDeselect(_selection);
+
         }
+
+        #region MyRegion
+        //creates the ray 
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if(Physics.Raycast(ray, out hit))
+        //selection determination
+        _selection = null;
+        if (Physics.Raycast(ray, out var hit))
         {
             var selection = hit.transform;
-            if(selection.CompareTag(selectableTag))
+            if (selection.CompareTag(selectableTag))
             {
-                var selectionRenderer = selection.GetComponent<Renderer>();
-                if(selectionRenderer != null)
-                {
-                    selectionRenderer.material = highlightMaterial;
-                }
                 _selection = selection;
             }
+        } 
+        #endregion
+
+        // selection and deselection response
+        if(_selection != null)
+        {
+            _selectionResponse.OnSelect(_selection);
         }
     }
+
+    
 }

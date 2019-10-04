@@ -502,6 +502,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1839535880}
   - component: {fileID: 1839535879}
+  - component: {fileID: 1839535881}
   m_Layer: 0
   m_Name: Selection Manager
   m_TagString: Untagged
@@ -522,8 +523,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectableTag: Selectable
-  highlightMaterial: {fileID: 2100000, guid: 183c0a377c6b1da43a5092af6afcf6ae, type: 2}
-  defaultMaterial: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!4 &1839535880
 Transform:
   m_ObjectHideFlags: 0
@@ -538,6 +537,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1839535881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1839535878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b20f3034b8f4a9049a0ccec18608aefc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1991046935 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100114, guid: 7dd9e94cb0871c54d973a1305975f399,
