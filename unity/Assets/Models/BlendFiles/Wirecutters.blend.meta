@@ -106,10 +106,27 @@ ModelImporter:
     7400066: Cylinder.003|Cube.005Action
     7400068: Cylinder.003|Cube.007Action
     7400070: Cylinder.003|Cylinder.003Action
+    7400072: Cube.002|Cube.002Action.002
+    7400074: Cube.002|Cube.003Action.001
+    7400076: Cube.002|Cube.005Action.001
+    7400078: Cube.002|Cylinder.003Action.002
+    7400080: Cube.005|Cube.002Action.002
+    7400082: Cube.005|Cube.003Action.001
+    7400084: Cube.005|Cube.005Action.001
+    7400086: Cube.005|Cylinder.003Action.002
+    7400088: Cube.003|Cube.002Action.002
+    7400090: Cube.003|Cube.003Action.001
+    7400092: Cube.003|Cube.005Action.001
+    7400094: Cube.003|Cylinder.003Action.002
+    7400096: Cylinder.003|Cube.002Action.002
+    7400098: Cylinder.003|Cube.003Action.001
+    7400100: Cylinder.003|Cube.005Action.001
+    7400102: Cylinder.003|Cylinder.003Action.002
     9500000: //RootNode
     10800000: Light
     10800002: Light.001
     10800004: Light.002
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1

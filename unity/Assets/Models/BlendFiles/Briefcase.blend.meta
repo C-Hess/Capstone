@@ -38,6 +38,29 @@ ModelImporter:
     100064: Cylinder.008
     100066: Cylinder.009
     100068: Light
+    100070: BezelOnRightSideOfBomb
+    100072: BottomOfKeyPad
+    100074: BottomOfLeftSideOfBomb
+    100076: BottomOfRightSideOfBomb
+    100078: BriefcaseBottom
+    100080: Button
+    100082: CaseHandle
+    100084: CaseTop
+    100086: ControllerWireConnector
+    100088: ControllerWireConnector.001
+    100090: ControllerWireConnector.002
+    100092: LCDGlass
+    100094: LogicBoard
+    100096: TopOfRightSideOfBomb
+    100098: TopSideOfLeftBomb
+    100100: Wire1
+    100102: Wire2
+    100104: Wire3
+    100106: Wire4
+    100108: Wire5
+    100110: Wire6
+    100112: Wire7
+    100114: Wire8
     400000: //RootNode
     400002: Camera
     400004: Cube
@@ -73,6 +96,29 @@ ModelImporter:
     400064: Cylinder.008
     400066: Cylinder.009
     400068: Light
+    400070: BezelOnRightSideOfBomb
+    400072: BottomOfKeyPad
+    400074: BottomOfLeftSideOfBomb
+    400076: BottomOfRightSideOfBomb
+    400078: BriefcaseBottom
+    400080: Button
+    400082: CaseHandle
+    400084: CaseTop
+    400086: ControllerWireConnector
+    400088: ControllerWireConnector.001
+    400090: ControllerWireConnector.002
+    400092: LCDGlass
+    400094: LogicBoard
+    400096: TopOfRightSideOfBomb
+    400098: TopSideOfLeftBomb
+    400100: Wire1
+    400102: Wire2
+    400104: Wire3
+    400106: Wire4
+    400108: Wire5
+    400110: Wire6
+    400112: Wire7
+    400114: Wire8
     2000000: Camera
     2100000: Material
     2100002: No Name
@@ -108,6 +154,29 @@ ModelImporter:
     2300058: Cylinder.007
     2300060: Cylinder.008
     2300062: Cylinder.009
+    2300064: BezelOnRightSideOfBomb
+    2300066: BottomOfKeyPad
+    2300068: BottomOfLeftSideOfBomb
+    2300070: BottomOfRightSideOfBomb
+    2300072: BriefcaseBottom
+    2300074: Button
+    2300076: CaseHandle
+    2300078: CaseTop
+    2300080: ControllerWireConnector
+    2300082: ControllerWireConnector.001
+    2300084: ControllerWireConnector.002
+    2300086: LCDGlass
+    2300088: LogicBoard
+    2300090: TopOfRightSideOfBomb
+    2300092: TopSideOfLeftBomb
+    2300094: Wire1
+    2300096: Wire2
+    2300098: Wire3
+    2300100: Wire4
+    2300102: Wire5
+    2300104: Wire6
+    2300106: Wire7
+    2300108: Wire8
     3300000: Cube
     3300002: Cube.001
     3300004: Cube.002
@@ -140,6 +209,29 @@ ModelImporter:
     3300058: Cylinder.007
     3300060: Cylinder.008
     3300062: Cylinder.009
+    3300064: BezelOnRightSideOfBomb
+    3300066: BottomOfKeyPad
+    3300068: BottomOfLeftSideOfBomb
+    3300070: BottomOfRightSideOfBomb
+    3300072: BriefcaseBottom
+    3300074: Button
+    3300076: CaseHandle
+    3300078: CaseTop
+    3300080: ControllerWireConnector
+    3300082: ControllerWireConnector.001
+    3300084: ControllerWireConnector.002
+    3300086: LCDGlass
+    3300088: LogicBoard
+    3300090: TopOfRightSideOfBomb
+    3300092: TopSideOfLeftBomb
+    3300094: Wire1
+    3300096: Wire2
+    3300098: Wire3
+    3300100: Wire4
+    3300102: Wire5
+    3300104: Wire6
+    3300106: Wire7
+    3300108: Wire8
     4300000: Cube
     4300002: Cylinder
     4300004: Cube.001
@@ -172,9 +264,37 @@ ModelImporter:
     4300058: Cylinder.007
     4300060: Cylinder.008
     4300062: Cylinder.009
+    4300064: BriefcaseBottom
+    4300066: BottomOfLeftSideOfBomb
+    4300068: TopSideOfLeftBomb
+    4300070: BottomOfRightSideOfBomb
+    4300072: TopOfRightSideOfBomb
+    4300074: ControllerWireConnector
+    4300076: BottomOfKeyPad
+    4300078: BezelOnRightSideOfBomb
+    4300080: Button
+    4300082: CaseTop
+    4300084: LogicBoard
+    4300086: LCDGlass
+    4300088: ControllerWireConnector.001
+    4300090: ControllerWireConnector.002
+    4300092: CaseHandle
+    4300094: Wire2
+    4300096: Wire1
+    4300098: Wire4
+    4300100: Wire3
+    4300102: Wire5
+    4300104: Wire6
+    4300106: Wire7
+    4300108: Wire8
     7400000: Cube.001|Cube.001Action
+    7400002: CaseTop|CubeAction
+    7400004: CaseHandle|CubeAction
+    7400006: CaseHandle|CaseTopAction
+    7400008: CaseTop|CaseTopAction
     9500000: //RootNode
     10800000: Light
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
