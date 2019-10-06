@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameState : MonoBehaviour
 {
@@ -13,7 +14,9 @@ public class GameState : MonoBehaviour
     public List<Wire> wires;
     public Node currentPosition;
     public Node endNode;
+    public List<GameObject> wire;
 
+    public float restart = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +39,29 @@ public class GameState : MonoBehaviour
         {
             Debug.Log(e.color);
         }
+    }
+
+    public void LevelWon()
+    {
+        Debug.Log("Level Complete!");
+        levelNumber++;
+        Invoke("Restart", restart);
+    }
+
+    public void RestartGame()
+    {
+        Debug.Log("Restarting game...");
+        Invoke("Restart", restart);
+    }
+
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
     // Update is called once per frame
