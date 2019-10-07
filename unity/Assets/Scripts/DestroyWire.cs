@@ -17,7 +17,8 @@ public class DestroyWire : MonoBehaviour
                 MeshCollider mc = hit.collider as MeshCollider;
                 if(mc != null)
                 {
-                    Destroy(mc.gameObject);
+                    //Destroy(mc.gameObject);
+                    mc.gameObject.SetActive(false); //instead of destroying the object, im doing this so it just deactivates it.
                     Debug.Log("I hit a wire.");
                 }
             }
