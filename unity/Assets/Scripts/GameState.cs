@@ -5,22 +5,30 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameState : MonoBehaviour
 {
     public int levelNumber;
-    public int score;
     public int time;
     public List<Wire> wires;
+    public List<GameObject> wire;
     public Node currentPosition;
     public Node endNode;
-    public List<GameObject> wire;
 
-    public float restart = 1f;
+    public float restart = 10f;
+    private float startTime;
+    public int scoreTime = 0;
+
+    //running = 1, transition = 2, gameover = 3
+    public int gameState = 1;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        startTime = Time.time;
+
         System.Random rnd = new System.Random();
         levelNumber = 1;
         wires = new List<Wire>();
@@ -41,10 +49,45 @@ public class GameState : MonoBehaviour
         }
     }
 
+    // Update is called once per frame
+    void Update()
+    {
+        if(gameState == 1)
+        {
+            scoreTime = (int) Time.time - (int) startTime;
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                RaycastHit hit;
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    MeshCollider mc = hit.collider as MeshCollider;
+                    if (mc != null)
+                    {
+                        Destroy(mc.gameObject);
+                        Debug.Log("I hit a wire.");
+                        Debug.Log(hit.collider.gameObject);
+                    }
+                }
+            }
+        }
+        if(gameState == 2)
+        {
+            
+        }
+        if (gameState == 3)
+        {
+
+        }
+    }
+
     public void LevelWon()
     {
         Debug.Log("Level Complete!");
         levelNumber++;
+        gameState = 2;
         Invoke("Restart", restart);
     }
 
@@ -64,12 +107,6 @@ public class GameState : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void Traverse(Wire wire)
     {
         currentPosition = currentPosition.NextNode(wire);
@@ -77,6 +114,7 @@ public class GameState : MonoBehaviour
         {
             //Bomb explodes, game over
             //TODO: implement this
+            gameState = 3;
         }
         if (currentPosition == endNode)
         {

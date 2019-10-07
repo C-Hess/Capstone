@@ -2,8 +2,8 @@
 
 internal class HighlightSelectionResponse : MonoBehaviour, ISelectionResponse
 {
-    [SerializeField] public Material highlightMaterial;
-    [SerializeField] public Material defaultMaterial;
+    [SerializeField] public Material highlightMaterial = null;
+    [SerializeField] public Material defaultMaterial = null;
 
     public void OnSelect(Transform selection)
     {

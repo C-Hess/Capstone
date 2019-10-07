@@ -19,6 +19,7 @@ public class DestroyWire : MonoBehaviour
                 {
                     Destroy(mc.gameObject);
                     Debug.Log("I hit a wire.");
+                    Debug.Log(hit.collider.gameObject);
                 }
             }
         }
