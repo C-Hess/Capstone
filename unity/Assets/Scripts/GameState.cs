@@ -1,8 +1,6 @@
 ﻿using DFAGraph;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class GameState : MonoBehaviour
@@ -11,9 +9,12 @@ public class GameState : MonoBehaviour
     public int score;
     public int time;
     public List<Wire> wires;
-    public Node currentPosition;
-    public Node endNode;
-
+    public DFANode startNode;
+    public DFANode currentPosition;
+    public DFANode endNode;
+    public Canvas canvas;
+    public GameObject dfaNodePrefab;
+    public GameObject dfaEdgePrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -27,15 +28,17 @@ public class GameState : MonoBehaviour
             wires.Add(new Wire(colors[rnd.Next(2)]));
         }
 
-        FirstLevel FL = new FirstLevel();
-        currentPosition = FL.dfa[0];
-        endNode = FL.dfa[6];
+        var dfa = GenerateLevel();
+        startNode = dfa[0];
+        currentPosition = startNode;
+        endNode = dfa[6];
 
         var edges = FindMinPath();
-        foreach(var e in edges)
+        foreach (var e in edges)
         {
-            Debug.Log(e.color);
+            Debug.Log(e.Color);
         }
+
     }
 
     // Update is called once per frame
@@ -59,28 +62,28 @@ public class GameState : MonoBehaviour
         }
     }
 
-   
-    public List<Edge> FindMinPath()
+
+    public List<DFAEdge> FindMinPath()
     {
-        currentPosition.UnvisitChildren();
+        startNode.UnvisitChildren();
 
-        var nodes = new Stack<Tuple<Node, Node>>();
-        nodes.Push(Tuple.Create<Node, Node>(currentPosition, null));
+        var nodes = new Stack<Tuple<DFANode, DFANode>>();
+        nodes.Push(Tuple.Create<DFANode, DFANode>(startNode, null));
 
-        while(nodes.Count > 0)
+        while (nodes.Count > 0)
         {
             var current = nodes.Pop();
 
             current.Item1.visited = true;
             current.Item1.shortestPrevious = current.Item2;
 
-            if(current.Item1 == endNode)
+            if (current.Item1 == endNode)
             {
                 break;
             }
             else
             {
-                foreach (Node n in current.Item1.GetChildNodes())
+                foreach (DFANode n in current.Item1.GetChildNodes())
                 {
                     if (!n.visited)
                     {
@@ -90,75 +93,115 @@ public class GameState : MonoBehaviour
             }
         }
 
-        var shortestPath = new List<Node>();
+        var shortestPath = new List<DFANode>();
         var backtrackCurrent = endNode;
-        while(backtrackCurrent != null)
+        while (backtrackCurrent != null)
         {
             shortestPath.Add(backtrackCurrent);
             backtrackCurrent = backtrackCurrent.shortestPrevious;
         }
         shortestPath.Reverse();
 
-        var edgesForPath = new List<Edge>();
-        for(int i = 0; i < shortestPath.Count - 1; i ++)
+        var edgesForPath = new List<DFAEdge>();
+        for (int i = 0; i < shortestPath.Count - 1; i++)
         {
-            Node currNode = shortestPath[i];
-            Node nextNode = shortestPath[i + 1];
+            DFANode currNode = shortestPath[i];
+            DFANode nextNode = shortestPath[i + 1];
             edgesForPath.Add(currNode.edges.Find(x => x.child == nextNode));
         }
 
         return edgesForPath;
     }
 
+    public DFANode SpawnNode(Vector3 position)
+    {
+        var newObj = Instantiate(this.dfaNodePrefab, canvas.transform);
+        newObj.transform.position = position;
+        return newObj.GetComponent<DFANode>();
+    }
 
-}
+    public DFAEdge SpawnEdge(DFANode parent, DFANode child, Color color)
+    {
+        var newObj = Instantiate(this.dfaEdgePrefab, canvas.transform);
+        var edge = newObj.GetComponent<DFAEdge>();
+        edge.parent = parent;
+        edge.child = child;
+        edge.Color = color;
 
-class FirstLevel
-{
-    public List<Node> dfa;
-    List<Edge> edgeList;
+        parent.edges.Add(edge);
+        child.edges.Add(edge);
 
-    public FirstLevel()
+        var parentPos = parent.gameObject.transform.position;
+        var childPos = child.gameObject.transform.position;
+
+        var edgeRectTrans = newObj.GetComponent<RectTransform>();
+        edgeRectTrans.sizeDelta = new Vector2(Vector3.Distance(parentPos, childPos), 5);
+        Debug.Log("New Edge: "); 
+        Debug.Log(parentPos);
+        Debug.Log(childPos);
+        Debug.Log(Vector2.Angle(childPos - parentPos, childPos));
+
+        newObj.transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, parent.gameObject.transform.up));
+
+        edge.transform.position = (parentPos + childPos) / 2;
+        return edge;
+    }
+
+    public List<DFANode> GenerateLevel()
     {
 
         Color red = new Color(1, 0, 0);
         Color green = new Color(0, 1, 0);
         Color blue = new Color(0, 0, 1);
 
-        dfa = new List<Node>();
+        var dfa = new List<DFANode>();
+
+        float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
+        float maxY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMax;
+        float z = canvas.GetComponent<RectTransform>().position.z;
+
+        int nodeDiam = 100;
+        int padding = 40;
+        Vector3 origin = new Vector3(minX + nodeDiam/2 + padding/2, maxY - nodeDiam / 2 - padding / 2, z);
+        Vector3 xOffset = new Vector3(nodeDiam + padding, 0, 0);
+        Vector3 yOffset = new Vector3(0, -nodeDiam - padding, 0);
+
+        int x = 0;
+        int y = 0;
+
         for (int i = 0; i < 7; i++)
         {
-            dfa.Add(new Node());
+            dfa.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+            x++;
+            if(x > 2)
+            {
+                x = 0;
+                y++;
+            }
         }
-        edgeList = new List<Edge>();
-        edgeList.Add(new Edge(dfa[0], red, dfa[1]));
-        edgeList.Add(new Edge(dfa[0], blue, dfa[2]));
 
-        edgeList.Add(new Edge(dfa[1], blue, dfa[3]));
+        SpawnEdge(dfa[0], dfa[1], red);
+        SpawnEdge(dfa[0], dfa[2], blue);
 
-        edgeList.Add(new Edge(dfa[2], red, dfa[4]));
+        SpawnEdge(dfa[1], dfa[3], blue);
 
-        edgeList.Add(new Edge(dfa[3], red, dfa[5]));
-        edgeList.Add(new Edge(dfa[3], green, dfa[2]));
+        SpawnEdge(dfa[2], dfa[4], red);
 
-        edgeList.Add(new Edge(dfa[4], blue, dfa[5]));
-        edgeList.Add(new Edge(dfa[4], green, dfa[1]));
+        SpawnEdge(dfa[3], dfa[5], red);
+        SpawnEdge(dfa[3], dfa[2], green);
 
-        edgeList.Add(new Edge(dfa[5], red, dfa[5]));
-        edgeList.Add(new Edge(dfa[5], blue, dfa[2]));
-        edgeList.Add(new Edge(dfa[5], green, dfa[6]));
+        SpawnEdge(dfa[4], dfa[5], blue);
+        SpawnEdge(dfa[4], dfa[1], green);
 
-        edgeList.Add(new Edge(dfa[6], red, dfa[6]));
-        edgeList.Add(new Edge(dfa[6], blue, dfa[6]));
-        edgeList.Add(new Edge(dfa[6], green, dfa[6]));
+        SpawnEdge(dfa[5], dfa[5], red);
+        SpawnEdge(dfa[5], dfa[2], blue);
+        SpawnEdge(dfa[5], dfa[6], green);
 
-        dfa[0].edges = edgeList.GetRange(0, 2);
-        dfa[1].edges = edgeList.GetRange(2, 1);
-        dfa[2].edges = edgeList.GetRange(3, 1);
-        dfa[3].edges = edgeList.GetRange(4, 2);
-        dfa[4].edges = edgeList.GetRange(6, 2);
-        dfa[5].edges = edgeList.GetRange(8, 3);
-        dfa[6].edges = edgeList.GetRange(11, 3);
+        SpawnEdge(dfa[6], dfa[6], red);
+        SpawnEdge(dfa[6], dfa[6], blue);
+        SpawnEdge(dfa[6], dfa[6], green);
+
+        return dfa;
     }
 
 }
