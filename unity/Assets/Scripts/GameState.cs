@@ -1,46 +1,50 @@
 ﻿using DFAGraph;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using System.Linq;
 
 public class GameState : MonoBehaviour
 {
     public int levelNumber;
-    public int score;
+    private int score;
+    public Text scoreText;
     public int time;
-    public List<Wire> wires;
-    public DFANode startNode;
-    public DFANode currentPosition;
-    public DFANode endNode;
+    private DFANode startNode;
+    private DFANode currentPosition;
+    private DFANode endNode;
+    private List<DFANode> allNodes = new List<DFANode>();
     public Canvas canvas;
     public GameObject dfaNodePrefab;
     public GameObject dfaEdgePrefab;
-    public List<GameObject> wire;
-
+    public GameObject bomb;
+    public List<GameObject> possibleWires;
+    public UIStateManager uiManager;
+    public LCDController lcdController;
+    
     public float restart = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
-        System.Random rnd = new System.Random();
         levelNumber = 1;
-        wires = new List<Wire>();
-        Color[] colors = { new Color(1, 0, 0), new Color(0, 1, 0), new Color(0, 0, 1) };
-        for (int i = 0; i < 15; i++)
-        {
-            wires.Add(new Wire(colors[rnd.Next(2)]));
-        }
 
         var dfa = GenerateLevel();
         startNode = dfa[0];
+        startNode.IsCurrent = true;
         currentPosition = startNode;
         endNode = dfa[6];
+        endNode.gameObject.GetComponent<Image>().color = Color.red;
 
         var edges = FindMinPath();
-        foreach (var e in edges)
+        edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
+        for(int i = 0; i < edges.Count; i ++)
         {
-            Debug.Log(e.Color);
+            var newWire = Instantiate(possibleWires[i], bomb.transform);
+            newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
+            newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
 
     }
@@ -48,9 +52,15 @@ public class GameState : MonoBehaviour
     public void LevelWon()
     {
         Debug.Log("Level Complete!");
-        levelNumber++;
-        Invoke("Restart", restart);
+        lcdController.StopTimer();
+        uiManager.SwitchWin();
     }
+
+    public void GameOver()
+    {
+        Debug.Log("Failure!");
+        lcdController.StopTimer();
+        uiManager.SwitchLose();    }
 
     public void RestartGame()
     {
@@ -71,37 +81,55 @@ public class GameState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+            if (Physics.Raycast(ray, out hit))
+            {
+                MeshCollider mc = hit.collider as MeshCollider;
+                if (mc != null && hit.collider.gameObject.CompareTag("Selectable"))
+                {
+                    Traverse(mc.gameObject);
+                    mc.gameObject.SetActive(false); //instead of destroying the object, im doing this so it just deactivates it.
+                }
+            }
+        }
     }
 
-    public void Traverse(Wire wire)
+    public void Traverse(GameObject wire)
     {
-        currentPosition = currentPosition.NextNode(wire);
+        currentPosition.IsCurrent = false;
+        currentPosition = currentPosition.NextNode(wire.GetComponent<DFAWire>().color);
         if (currentPosition == null)
         {
-            //Bomb explodes, game over
-            //TODO: implement this
+            GameOver();
         }
-        if (currentPosition == endNode)
+        else
         {
-            //Win
-            //TODO: implement winning
+            currentPosition.IsCurrent = true;
+            if (currentPosition == endNode)
+            {
+                LevelWon();
+            }
         }
+
     }
 
 
     public List<DFAEdge> FindMinPath()
     {
-        startNode.UnvisitChildren();
+        ResetVisited();
 
-        var nodes = new Stack<Tuple<DFANode, DFANode>>();
-        nodes.Push(Tuple.Create<DFANode, DFANode>(startNode, null));
+        var nodes = new Queue<Tuple<DFANode, DFANode>>();
+        nodes.Enqueue(Tuple.Create<DFANode, DFANode>(startNode, null));
 
         while (nodes.Count > 0)
         {
-            var current = nodes.Pop();
+            var current = nodes.Dequeue();
 
-            current.Item1.visited = true;
+            current.Item1.Visited = true;
             current.Item1.shortestPrevious = current.Item2;
 
             if (current.Item1 == endNode)
@@ -112,9 +140,9 @@ public class GameState : MonoBehaviour
             {
                 foreach (DFANode n in current.Item1.GetChildNodes())
                 {
-                    if (!n.visited)
+                    if (!n.Visited)
                     {
-                        nodes.Push(Tuple.Create(n, current.Item1));
+                        nodes.Enqueue(Tuple.Create(n, current.Item1));
                     }
                 }
             }
@@ -136,6 +164,7 @@ public class GameState : MonoBehaviour
             DFANode nextNode = shortestPath[i + 1];
             edgesForPath.Add(currNode.edges.Find(x => x.child == nextNode));
         }
+        ResetVisited();
 
         return edgesForPath;
     }
@@ -144,34 +173,38 @@ public class GameState : MonoBehaviour
     {
         var newObj = Instantiate(this.dfaNodePrefab, canvas.transform);
         newObj.transform.position = position;
+        allNodes.Add(newObj.GetComponent<DFANode>());
         return newObj.GetComponent<DFANode>();
     }
 
-    public DFAEdge SpawnEdge(DFANode parent, DFANode child, Color color)
+    public DFAEdge SpawnEdge(DFANode parent, DFANode child, Color color, string colorName)
     {
         var newObj = Instantiate(this.dfaEdgePrefab, canvas.transform);
         var edge = newObj.GetComponent<DFAEdge>();
         edge.parent = parent;
         edge.child = child;
-        edge.Color = color;
+        edge.SetColor(color, colorName);
 
         parent.edges.Add(edge);
-        child.edges.Add(edge);
+        //child.edges.Add(edge);
 
         var parentPos = parent.gameObject.transform.position;
         var childPos = child.gameObject.transform.position;
 
         var edgeRectTrans = newObj.GetComponent<RectTransform>();
-        edgeRectTrans.sizeDelta = new Vector2(Vector3.Distance(parentPos, childPos), 5);
-        Debug.Log("New Edge: "); 
-        Debug.Log(parentPos);
-        Debug.Log(childPos);
-        Debug.Log(Vector2.Angle(childPos - parentPos, childPos));
+        edgeRectTrans.sizeDelta = new Vector2(Vector3.Distance(parentPos, childPos), 60);
 
-        newObj.transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, parent.gameObject.transform.up));
+        newObj.transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, -parent.gameObject.transform.forward));
 
         edge.transform.position = (parentPos + childPos) / 2;
         return edge;
+    }
+
+    private void ResetVisited()
+    {
+        foreach (var node in allNodes) {
+            node.Visited = false;
+        }
     }
 
     public List<DFANode> GenerateLevel()
@@ -207,26 +240,21 @@ public class GameState : MonoBehaviour
             }
         }
 
-        SpawnEdge(dfa[0], dfa[1], red);
-        SpawnEdge(dfa[0], dfa[2], blue);
+        SpawnEdge(dfa[0], dfa[1], red, "red");
+        SpawnEdge(dfa[0], dfa[2], blue, "blue");
 
-        SpawnEdge(dfa[1], dfa[3], blue);
+        SpawnEdge(dfa[1], dfa[3], blue, "blue");
 
-        SpawnEdge(dfa[2], dfa[4], red);
+        SpawnEdge(dfa[2], dfa[4], red, "red");
 
-        SpawnEdge(dfa[3], dfa[5], red);
-        SpawnEdge(dfa[3], dfa[2], green);
+        SpawnEdge(dfa[3], dfa[5], red, "red");
+        SpawnEdge(dfa[3], dfa[2], green, "green");
 
-        SpawnEdge(dfa[4], dfa[5], blue);
-        SpawnEdge(dfa[4], dfa[1], green);
+        SpawnEdge(dfa[4], dfa[5], blue, "blue");
+        SpawnEdge(dfa[4], dfa[1], green, "green");
 
-        SpawnEdge(dfa[5], dfa[5], red);
-        SpawnEdge(dfa[5], dfa[2], blue);
-        SpawnEdge(dfa[5], dfa[6], green);
-
-        SpawnEdge(dfa[6], dfa[6], red);
-        SpawnEdge(dfa[6], dfa[6], blue);
-        SpawnEdge(dfa[6], dfa[6], green);
+        SpawnEdge(dfa[5], dfa[2], blue, "blue");
+        SpawnEdge(dfa[5], dfa[6], green, "green");
 
         return dfa;
     }

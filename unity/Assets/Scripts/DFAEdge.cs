@@ -7,18 +7,22 @@ namespace DFAGraph
     {
         public DFANode child;
         public DFANode parent;
+        private string colorName;
 
-        public Color Color
+        public Color GetColor()
         {
-            get
-            {
-                return this.GetComponent<Image>().color;
-            }
+            return this.GetComponent<Image>().color;
+        }
 
-            set
-            {
-                this.GetComponent<Image>().color = value;
-            }
+        public string GetColorStr()
+        {
+            return colorName;
+        }
+
+        public void SetColor(Color value, string strName)
+        {
+            this.GetComponent<Image>().color = value;
+            this.colorName = strName;
         }
 
     }
