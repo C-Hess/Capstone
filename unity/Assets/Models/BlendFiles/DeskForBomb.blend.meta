@@ -27,6 +27,8 @@ ModelImporter:
     100042: Cylinder.006
     100044: //RootNode
     100046: Light
+    100048: Cube.014
+    100050: Cylinder.007
     400000: Camera
     400002: Cube
     400004: Cube.001
@@ -51,9 +53,32 @@ ModelImporter:
     400042: Cylinder.006
     400044: //RootNode
     400046: Light
+    400048: Cube.014
+    400050: Cylinder.007
     2000000: Camera
     2100000: Material
     2100002: No Name
+    2100004: Material.004
+    2100006: Material.002
+    2100008: Material.003
+    2100010: Material.001
+    2100012: Material.011
+    2100014: Material.012
+    2100016: Material.029
+    2100018: Material.030
+    2100020: Material.014
+    2100022: Material.013
+    2100024: Material.020
+    2100026: Material.019
+    2100028: Material.027
+    2100030: Material.028
+    2100032: Material.026
+    2100034: Material.025
+    2100036: Material.018
+    2100038: Material.017
+    2100040: Material.016
+    2100042: Material.015
+    2100044: Material.032
     2300000: Cube
     2300002: Cube.001
     2300004: Cube.002
@@ -75,6 +100,8 @@ ModelImporter:
     2300036: Cylinder.004
     2300038: Cylinder.005
     2300040: Cylinder.006
+    2300042: Cube.014
+    2300044: Cylinder.007
     3300000: Cube
     3300002: Cube.001
     3300004: Cube.002
@@ -96,6 +123,8 @@ ModelImporter:
     3300036: Cylinder.004
     3300038: Cylinder.005
     3300040: Cylinder.006
+    3300042: Cube.014
+    3300044: Cylinder.007
     4300000: Cube
     4300002: Cube.001
     4300004: Cube.002
@@ -117,6 +146,8 @@ ModelImporter:
     4300036: Cube.012
     4300038: Cube.013
     4300040: Cylinder.006
+    4300042: Cube.014
+    4300044: Cylinder.007
     10800000: Light
   externalObjects: {}
   materials:

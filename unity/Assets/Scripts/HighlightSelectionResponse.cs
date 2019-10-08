@@ -3,13 +3,14 @@
 internal class HighlightSelectionResponse : MonoBehaviour, ISelectionResponse
 {
     [SerializeField] public Material highlightMaterial;
-    [SerializeField] public Material defaultMaterial;
+    [SerializeField] private Material defaultMaterial;
 
     public void OnSelect(Transform selection)
     {
         var selectionRenderer = selection.GetComponent<Renderer>();
         if(selectionRenderer != null)
         {
+            defaultMaterial = selectionRenderer.material;
             selectionRenderer.material = this.highlightMaterial;
         }
     }
