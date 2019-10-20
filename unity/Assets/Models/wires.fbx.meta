@@ -1,0 +1,200 @@
+fileFormatVersion: 2
+guid: 9721214854649724fbc543ee65740154
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: BezierCircle
+    100002: Wire010
+    100004: Wire011
+    100006: Wire012
+    100008: Wire013
+    100010: Wire014
+    100012: Wire015
+    100014: Wire016
+    100016: Wire017
+    100018: Wire018
+    100020: Wire019
+    100022: Wire020
+    100024: Wire1
+    100026: Wire2
+    100028: Wire3
+    100030: Wire4
+    100032: Wire5
+    100034: Wire6
+    100036: Wire7
+    100038: Wire8
+    100040: Wire9
+    100042: //RootNode
+    400000: BezierCircle
+    400002: Wire010
+    400004: Wire011
+    400006: Wire012
+    400008: Wire013
+    400010: Wire014
+    400012: Wire015
+    400014: Wire016
+    400016: Wire017
+    400018: Wire018
+    400020: Wire019
+    400022: Wire020
+    400024: Wire1
+    400026: Wire2
+    400028: Wire3
+    400030: Wire4
+    400032: Wire5
+    400034: Wire6
+    400036: Wire7
+    400038: Wire8
+    400040: Wire9
+    400042: //RootNode
+    2100000: No Name
+    2300000: BezierCircle
+    2300002: Wire010
+    2300004: Wire011
+    2300006: Wire012
+    2300008: Wire013
+    2300010: Wire014
+    2300012: Wire015
+    2300014: Wire016
+    2300016: Wire017
+    2300018: Wire018
+    2300020: Wire019
+    2300022: Wire020
+    2300024: Wire1
+    2300026: Wire2
+    2300028: Wire3
+    2300030: Wire4
+    2300032: Wire5
+    2300034: Wire6
+    2300036: Wire7
+    2300038: Wire8
+    2300040: Wire9
+    3300000: BezierCircle
+    3300002: Wire010
+    3300004: Wire011
+    3300006: Wire012
+    3300008: Wire013
+    3300010: Wire014
+    3300012: Wire015
+    3300014: Wire016
+    3300016: Wire017
+    3300018: Wire018
+    3300020: Wire019
+    3300022: Wire020
+    3300024: Wire1
+    3300026: Wire2
+    3300028: Wire3
+    3300030: Wire4
+    3300032: Wire5
+    3300034: Wire6
+    3300036: Wire7
+    3300038: Wire8
+    3300040: Wire9
+    4300000: BezierCircle
+    4300002: Wire010
+    4300004: Wire011
+    4300006: Wire012
+    4300008: Wire013
+    4300010: Wire014
+    4300012: Wire015
+    4300014: Wire016
+    4300016: Wire017
+    4300018: Wire018
+    4300020: Wire019
+    4300022: Wire020
+    4300024: Wire1
+    4300026: Wire2
+    4300028: Wire3
+    4300030: Wire4
+    4300032: Wire5
+    4300034: Wire6
+    4300036: Wire7
+    4300038: Wire8
+    4300040: Wire9
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
