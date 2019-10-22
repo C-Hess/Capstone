@@ -16,7 +16,7 @@ namespace Tests
             DFANode node2 = new DFANode();
 
             DFAEdge edge = new DFAEdge();
-            edge.SetColor(1, "red");
+            edge.SetColor(new Color(1,0,0), "red");
             edge.parent = node1;
             edge.child = node2;
 
