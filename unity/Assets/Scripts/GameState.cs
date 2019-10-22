@@ -20,7 +20,7 @@ public class GameState : MonoBehaviour
     public GameObject dfaNodePrefab;
     public GameObject dfaEdgePrefab;
     public GameObject bomb;
-    public List<GameObject> possibleWires;
+    public List<GameObject> WirePrefab;
     public UIStateManager uiManager;
     public LCDController lcdController;
     
@@ -42,7 +42,7 @@ public class GameState : MonoBehaviour
         edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
         for(int i = 0; i < edges.Count; i ++)
         {
-            var newWire = Instantiate(possibleWires[i], bomb.transform);
+            var newWire = Instantiate(WirePrefab[i], bomb.transform);
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
