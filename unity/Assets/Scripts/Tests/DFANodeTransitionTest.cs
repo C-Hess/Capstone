@@ -10,13 +10,15 @@ namespace Tests
     public class DFANodeTransitionTest
     {
         [UnityTest]
-        // Start is called before the first frame update
         public IEnumerator NextNodeTest()
         {
             DFANode node1 = new DFANode();
             DFANode node2 = new DFANode();
 
-            DFAEdge edge = new DFAEdge("red");
+            DFAEdge edge = new DFAEdge();
+            edge.SetColor(1, "red");
+            edge.parent = node1;
+            edge.child = node2;
 
             yield return null;
 
@@ -24,10 +26,6 @@ namespace Tests
             var nullNode = node1.NextNode("green");
             Assert.AreEqual(nextNode, node2);
             Assert.AreEqual(nullNode, null);
-
-            
-
-
         }
     }
 }
