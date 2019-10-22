@@ -1,0 +1,190 @@
+fileFormatVersion: 2
+guid: 8e1025aa1ffd9b74490a8c1276d7173b
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: BezelOnRightSideOfBomb
+    100002: BottomOfKeyPad
+    100004: BottomOfLeftSideOfBomb
+    100006: BottomOfRightSideOfBomb
+    100008: //RootNode
+    100010: BriefcaseBottom
+    100012: Button
+    100014: CaseHandle
+    100016: CaseTop
+    100018: ControllerWireConnector
+    100020: ControllerWireConnector.001
+    100022: ControllerWireConnector.002
+    100024: ControllerWireConnector.003
+    100026: ControllerWireConnector.004
+    100028: Cylinder
+    100030: LCDGlass
+    100032: LogicBoard
+    100034: TopOfRightSideOfBomb
+    100036: TopSideOfLeftBomb
+    400000: BezelOnRightSideOfBomb
+    400002: BottomOfKeyPad
+    400004: BottomOfLeftSideOfBomb
+    400006: BottomOfRightSideOfBomb
+    400008: //RootNode
+    400010: BriefcaseBottom
+    400012: Button
+    400014: CaseHandle
+    400016: CaseTop
+    400018: ControllerWireConnector
+    400020: ControllerWireConnector.001
+    400022: ControllerWireConnector.002
+    400024: ControllerWireConnector.003
+    400026: ControllerWireConnector.004
+    400028: Cylinder
+    400030: LCDGlass
+    400032: LogicBoard
+    400034: TopOfRightSideOfBomb
+    400036: TopSideOfLeftBomb
+    2100000: No Name
+    2100002: Material
+    2300000: BezelOnRightSideOfBomb
+    2300002: BottomOfKeyPad
+    2300004: BottomOfLeftSideOfBomb
+    2300006: BottomOfRightSideOfBomb
+    2300008: BriefcaseBottom
+    2300010: Button
+    2300012: CaseHandle
+    2300014: CaseTop
+    2300016: ControllerWireConnector
+    2300018: ControllerWireConnector.001
+    2300020: ControllerWireConnector.002
+    2300022: ControllerWireConnector.003
+    2300024: ControllerWireConnector.004
+    2300026: Cylinder
+    2300028: LCDGlass
+    2300030: LogicBoard
+    2300032: TopOfRightSideOfBomb
+    2300034: TopSideOfLeftBomb
+    3300000: BezelOnRightSideOfBomb
+    3300002: BottomOfKeyPad
+    3300004: BottomOfLeftSideOfBomb
+    3300006: BottomOfRightSideOfBomb
+    3300008: BriefcaseBottom
+    3300010: Button
+    3300012: CaseHandle
+    3300014: CaseTop
+    3300016: ControllerWireConnector
+    3300018: ControllerWireConnector.001
+    3300020: ControllerWireConnector.002
+    3300022: ControllerWireConnector.003
+    3300024: ControllerWireConnector.004
+    3300026: Cylinder
+    3300028: LCDGlass
+    3300030: LogicBoard
+    3300032: TopOfRightSideOfBomb
+    3300034: TopSideOfLeftBomb
+    4300000: CaseTop
+    4300002: CaseHandle
+    4300004: BriefcaseBottom
+    4300006: BottomOfLeftSideOfBomb
+    4300008: TopSideOfLeftBomb
+    4300010: BottomOfRightSideOfBomb
+    4300012: TopOfRightSideOfBomb
+    4300014: ControllerWireConnector
+    4300016: BottomOfKeyPad
+    4300018: BezelOnRightSideOfBomb
+    4300020: Button
+    4300022: Cylinder
+    4300024: LogicBoard
+    4300026: LCDGlass
+    4300028: ControllerWireConnector.001
+    4300030: ControllerWireConnector.002
+    4300032: ControllerWireConnector.003
+    4300034: ControllerWireConnector.004
+    7400000: CaseHandle|CaseTopAction
+    7400002: CaseHandle|CubeAction
+    7400004: CaseTop|CaseTopAction
+    7400006: CaseTop|CubeAction
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
