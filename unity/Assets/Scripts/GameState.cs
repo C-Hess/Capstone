@@ -51,6 +51,7 @@ public class GameState : MonoBehaviour
 
     public void LevelWon()
     {
+        Score.scoreValue += 10;
         Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
@@ -58,12 +59,14 @@ public class GameState : MonoBehaviour
 
     public void GameOver()
     {
+        Score.scoreValue += 10;
         Debug.Log("Failure!");
         lcdController.StopTimer();
         uiManager.SwitchLose();    }
 
     public void RestartGame()
     {
+        Score.scoreValue = 0;
         Debug.Log("Restarting game...");
         Invoke("Restart", restart);
     }
