@@ -15,18 +15,13 @@ namespace Tests
             var gameObject = new GameObject();
             
             DFANode node1 = gameObject.AddComponent(typeof (DFANode)) as DFANode;
-            DFANode node2 = gameObject.AddComponent(typeof(DFANode)) as DFANode;
-            DFAEdge edge = gameObject.AddComponent(typeof(DFAEdge)) as DFAEdge;
-            edge.SetColor("red");
-            edge.parent = node1;
-            edge.child = node2;
+            var nextNode = node1.NextNode("red");
 
             yield return null;
+            Assert.AreEqual(nextNode, null);
 
-            var nextNode = node1.NextNode("red");
-            var nullNode = node1.NextNode("red");
-           // Assert.AreEqual(nextNode, node2);
-            Assert.AreEqual(nullNode, null);
+
+
         }
     }
 }
