@@ -8,9 +8,6 @@ using System.Linq;
 
 public class GameState : MonoBehaviour
 {
-    public int levelNumber;
-    private int score;
-    public Text scoreText;
     public int time;
     private DFANode startNode;
     private DFANode currentPosition;
@@ -23,7 +20,14 @@ public class GameState : MonoBehaviour
     public List<GameObject> possibleWires;
     public UIStateManager uiManager;
     public LCDController lcdController;
-    
+
+    public int levelNumber = 0;
+    public Text levelNumberText;
+    public int score = 0;
+    public Text scoreText;
+    public Text endScoreText;
+    public Text endLevelNumberText;
+
     public float restart = 1f;
 
     // Start is called before the first frame update
@@ -54,13 +58,20 @@ public class GameState : MonoBehaviour
         Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
+        levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
+        levelNumber += 1;
+        score = (int) lcdController.InitialTime;
+        scoreText.text = "Score" + score.ToString();
     }
 
     public void GameOver()
     {
         Debug.Log("Failure!");
         lcdController.StopTimer();
-        uiManager.SwitchLose();    }
+        uiManager.SwitchLose();
+        endScoreText.text = "Total Score: " + score.ToString();
+        endLevelNumberText.text = "Level " + (levelNumber).ToString() + " Failed.";
+    }
 
     public void RestartGame()
     {
