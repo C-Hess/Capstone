@@ -127,10 +127,10 @@ public class GameState : MonoBehaviour
             {
                 if (n1 == n2) continue;
                 float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, allNodes[n2].gameObject.transform.localPosition);
-                if(distance <= 200)
+                if(distance <= 300)
                 {
                     Vector3 repulseDir = (allNodes[n1].gameObject.transform.localPosition - allNodes[n2].gameObject.transform.localPosition).normalized;
-                    Vector3 force = repulseDir * (1.0f / (distance * repulseCoeff));
+                    Vector3 force = repulseDir * (repulseCoeff / distance);
                     velocity += force * Time.fixedDeltaTime;
                 }
 
@@ -154,7 +154,7 @@ public class GameState : MonoBehaviour
 
                 float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, connectedNode.gameObject.transform.localPosition);
                 Vector3 attractionDir = (connectedNode.gameObject.transform.localPosition - allNodes[n1].gameObject.transform.localPosition).normalized;
-                Vector3 force = attractionDir * (1.0f / (2 * distance * attractionCoeff));
+                Vector3 force = attractionDir * (attractionCoeff / distance);
                 velocity += force * Time.fixedDeltaTime;
             }
             velocities[n1] += velocity;
