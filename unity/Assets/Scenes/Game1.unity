@@ -4041,8 +4041,8 @@ MonoBehaviour:
   scoreText: {fileID: 1934147380}
   endScoreText: {fileID: 769081711}
   endLevelNumberText: {fileID: 834845522}
-  repulseCoeff: 0.00001
-  attractionCoeff: 5
+  repulseCoeff: 32000000
+  attractionCoeff: 1000
   currMaxVelocity: 10
   restart: 1
 --- !u!1 &1571647095
