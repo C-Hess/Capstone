@@ -116,6 +116,9 @@ public class GameState : MonoBehaviour
         }
     }
 
+
+
+
     void FixedUpdate()
     {
         var velocities = new List<Vector3>();
@@ -169,7 +172,12 @@ public class GameState : MonoBehaviour
 
         currMaxVelocity *= 0.99f;
     }
-
+    
+    /**
+     * This method progresses through the dfa state given a wire that got cut.
+     * 
+     * @param wire - is the wire object that got cut
+     */
     public void Traverse(GameObject wire)
     {
         currentPosition.IsCurrent = false;
