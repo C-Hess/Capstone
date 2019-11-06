@@ -108,7 +108,11 @@ public class GameState : MonoBehaviour
             }
         }
     }
-
+    /**
+     * This method progresses through the dfa state given a wire that got cut.
+     * 
+     * @param wire - is the wire object that got cut
+     */
     public void Traverse(GameObject wire)
     {
         currentPosition.IsCurrent = false;
