@@ -8,22 +8,33 @@ using System.Linq;
 
 public class GameState : MonoBehaviour
 {
-    public int levelNumber;
-    private int score;
-    public Text scoreText;
     public int time;
     private DFANode startNode;
     private DFANode currentPosition;
     private DFANode endNode;
     private List<DFANode> allNodes = new List<DFANode>();
+    private List<DFAEdge> allEdges = new List<DFAEdge>();
+
     public Canvas canvas;
     public GameObject dfaNodePrefab;
     public GameObject dfaEdgePrefab;
     public GameObject bomb;
-    public List<GameObject> WirePrefab;
+    public List<GameObject> possibleWires;
     public UIStateManager uiManager;
     public LCDController lcdController;
-    
+
+    public int levelNumber = 0;
+    public Text levelNumberText;
+    public int score = 0;
+    public Text scoreText;
+    public Text endScoreText;
+    public Text endLevelNumberText;
+
+
+    public float repulseCoeff = 0.0001f;
+    public float attractionCoeff = 0.001f;
+    public float currMaxVelocity = 10.0f;
+
     public float restart = 1f;
 
     // Start is called before the first frame update
@@ -42,7 +53,7 @@ public class GameState : MonoBehaviour
         edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
         for(int i = 0; i < edges.Count; i ++)
         {
-            var newWire = Instantiate(WirePrefab[i], bomb.transform);
+            var newWire = Instantiate(possibleWires[i], bomb.transform);
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
@@ -55,6 +66,10 @@ public class GameState : MonoBehaviour
         Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
+        levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
+        levelNumber += 1;
+        score = (int) lcdController.InitialTime;
+        scoreText.text = "Score" + score.ToString();
     }
 
     public void GameOver()
@@ -62,7 +77,10 @@ public class GameState : MonoBehaviour
         Score.scoreValue += 10;
         Debug.Log("Failure!");
         lcdController.StopTimer();
-        uiManager.SwitchLose();    }
+        uiManager.SwitchLose();
+        endScoreText.text = "Total Score: " + score.ToString();
+        endLevelNumberText.text = "Level " + (levelNumber).ToString() + " Failed.";
+    }
 
     public void RestartGame()
     {
@@ -101,6 +119,68 @@ public class GameState : MonoBehaviour
         }
     }
 
+
+
+
+    void FixedUpdate()
+    {
+        var velocities = new List<Vector3>();
+        for (int n1 = 0; n1 < allNodes.Count; n1++)
+        {
+            Vector3 velocity = new Vector3();
+
+            for (int n2 = 0; n2 < allNodes.Count; n2++)
+            {
+                if (n1 == n2) continue;
+                float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, allNodes[n2].gameObject.transform.localPosition);
+                Vector3 repulseDir = (allNodes[n1].gameObject.transform.localPosition - allNodes[n2].gameObject.transform.localPosition).normalized;
+                Vector3 force = repulseDir * (repulseCoeff / (distance * distance));
+                velocity += force * Time.fixedDeltaTime;
+            }
+
+            velocities.Add(velocity);
+        }
+
+        for (int n1 = 0; n1 < allNodes.Count; n1++)
+        {
+            Vector3 velocity = new Vector3();
+
+            for (int e = 0; e < allNodes[n1].edges.Count; e++)
+            {
+                DFANode connectedNode = allNodes[n1].edges[e].child;
+                if(connectedNode == allNodes[n1])
+                {
+                    connectedNode = allNodes[n1].edges[e].parent;
+                }
+                
+
+                Vector3 attractionDir = (connectedNode.gameObject.transform.localPosition - allNodes[n1].gameObject.transform.localPosition).normalized;
+                Vector3 force = attractionDir * attractionCoeff;
+                velocity += force * Time.fixedDeltaTime;
+            }
+            velocities[n1] += velocity;
+
+        }
+
+        for (int n1 = 0; n1 < allNodes.Count; n1++)
+        {
+
+            allNodes[n1].transform.localPosition += Mathf.Min(velocities[n1].magnitude, currMaxVelocity) * velocities[n1].normalized;
+        }
+
+        foreach(DFAEdge e in allEdges)
+        {
+            RerenderEdge(e);
+        }
+
+        currMaxVelocity *= 0.99f;
+    }
+    
+    /**
+     * This method progresses through the dfa state given a wire that got cut.
+     * 
+     * @param wire - is the wire object that got cut
+     */
     public void Traverse(GameObject wire)
     {
         currentPosition.IsCurrent = false;
@@ -172,10 +252,10 @@ public class GameState : MonoBehaviour
         return edgesForPath;
     }
 
-    public DFANode SpawnNode(Vector3 position)
+    public DFANode SpawnNode(Vector3 localPosition)
     {
         var newObj = Instantiate(this.dfaNodePrefab, canvas.transform);
-        newObj.transform.position = position;
+        newObj.transform.localPosition = localPosition;
         allNodes.Add(newObj.GetComponent<DFANode>());
         return newObj.GetComponent<DFANode>();
     }
@@ -189,18 +269,34 @@ public class GameState : MonoBehaviour
         edge.SetColor(color, colorName);
 
         parent.edges.Add(edge);
-        //child.edges.Add(edge);
+        child.edges.Add(edge);
 
-        var parentPos = parent.gameObject.transform.position;
-        var childPos = child.gameObject.transform.position;
+        var parentPos = parent.gameObject.transform.localPosition;
+        var childPos = child.gameObject.transform.localPosition;
 
         var edgeRectTrans = newObj.GetComponent<RectTransform>();
         edgeRectTrans.sizeDelta = new Vector2(Vector3.Distance(parentPos, childPos), 60);
 
-        newObj.transform.rotation = Quaternion.Euler(0, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, -parent.gameObject.transform.forward));
-
-        edge.transform.position = (parentPos + childPos) / 2;
+        edge.transform.rotation = Quaternion.Euler(90, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, -parent.gameObject.transform.forward));
+        edge.transform.localPosition = (parentPos + childPos) / 2;
+        allEdges.Add(edge);
         return edge;
+    }
+
+    public void RerenderEdge(DFAEdge edge)
+    {
+        var parent = edge.parent;
+        var child = edge.child;
+
+        var parentPos = parent.gameObject.transform.localPosition;
+        var childPos = child.gameObject.transform.localPosition;
+
+        var edgeRectTrans = edge.gameObject.GetComponent<RectTransform>();
+        edgeRectTrans.sizeDelta = new Vector2(Vector3.Distance(parentPos, childPos), 60);
+
+        edge.gameObject.transform.rotation = Quaternion.Euler(-90, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, -parent.gameObject.transform.forward));
+
+        edge.transform.localPosition = (parentPos + childPos) / 2;
     }
 
     private void ResetVisited()
@@ -220,12 +316,15 @@ public class GameState : MonoBehaviour
         var dfa = new List<DFANode>();
 
         float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
+        float maxX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMax;
+        float minY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMin;
         float maxY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMax;
-        float z = canvas.GetComponent<RectTransform>().position.z;
 
-        int nodeDiam = 100;
-        int padding = 40;
-        Vector3 origin = new Vector3(minX + nodeDiam/2 + padding/2, maxY - nodeDiam / 2 - padding / 2, z);
+        float z = 0;
+
+        int nodeDiam = 1;
+        int padding = 1;
+        Vector3 origin = new Vector3((minX + maxX)/2, (minY + maxY) / 2, z);
         Vector3 xOffset = new Vector3(nodeDiam + padding, 0, 0);
         Vector3 yOffset = new Vector3(0, -nodeDiam - padding, 0);
 
