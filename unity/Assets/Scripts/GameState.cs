@@ -80,7 +80,7 @@ public class GameState : MonoBehaviour
 
     public void GameOver()
     {
-        Score.scoreValue += 10;
+        
         Debug.Log("Failure!");
         lcdController.StopTimer();
         uiManager.SwitchLose();
