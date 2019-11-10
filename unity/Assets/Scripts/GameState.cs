@@ -62,7 +62,7 @@ public class GameState : MonoBehaviour
 
     public void LevelWon()
     {
-        //Score.scoreValue += 10;
+        
         Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
