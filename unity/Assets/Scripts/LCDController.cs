@@ -60,4 +60,8 @@ public class LCDController : MonoBehaviour
         StopTimer();
         timerExpireEvent.Invoke();
     }
+    public void subtractTime()
+    {
+        
+    }
 }

@@ -20,6 +20,7 @@ public class GameState : MonoBehaviour
     public GameObject dfaEdgePrefab;
     public GameObject bomb;
     public List<GameObject> possibleWires;
+    public List<GameObject> Jumpers;
     public UIStateManager uiManager;
     public LCDController lcdController;
 
@@ -58,6 +59,16 @@ public class GameState : MonoBehaviour
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
 
+        //Not sure why its not setting colors and adding the jumpers to the scene if I remove them
+        var jumper = edges;
+        jumper = jumper.OrderBy(x => UnityEngine.Random.Range(0, jumper.Count - 1)).ToList();
+        for (int i = 0; i < jumper.Count; i++)
+        {
+            var newJumper = Instantiate(Jumpers[i], bomb.transform);
+            newJumper.GetComponent<Renderer>().material.color = jumper[i].GetColor();
+            newJumper.GetComponent<JumperColor>().color = jumper[i].GetColorStr();
+        }
+
     }
 
     public void LevelWon()
@@ -80,7 +91,6 @@ public class GameState : MonoBehaviour
 
     public void GameOver()
     {
-        
         Debug.Log("Failure!");
         lcdController.StopTimer();
         uiManager.SwitchLose();
@@ -117,7 +127,11 @@ public class GameState : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 MeshCollider mc = hit.collider as MeshCollider;
-                if (mc != null && hit.collider.gameObject.CompareTag("Selectable"))
+                if (mc != null && hit.collider.name.Contains("Jumper"))
+                {
+                    Jumper(mc.gameObject);
+                    mc.gameObject.SetActive(false); //instead of destroying the object, im doing this so it just deactivates it.
+                } else if (mc != null && hit.collider.gameObject.CompareTag("Selectable"))
                 {
                     Traverse(mc.gameObject);
                     mc.gameObject.SetActive(false); //instead of destroying the object, im doing this so it just deactivates it.
@@ -204,6 +218,36 @@ public class GameState : MonoBehaviour
                 LevelWon();
             }
         }
+
+    }
+
+    //I think this is working but idk how to correctly subtract time in the LCDController
+    public void Jumper(GameObject jumper)
+    {
+        if(lcdController.InitialTime - timer > 10)
+        {
+            lcdController.subtractTime();
+            timer += 10;
+        } else
+        {
+            GameOver();
+        }
+
+        currentPosition.IsCurrent = false;
+        currentPosition = currentPosition.NextNode(jumper.GetComponent<JumperColor>().color);
+        if (currentPosition == null)
+        {
+            GameOver();
+        }
+        else
+        {
+            currentPosition.IsCurrent = true;
+            if (currentPosition == endNode)
+            {
+                LevelWon();
+            }
+        }
+        
 
     }
 
