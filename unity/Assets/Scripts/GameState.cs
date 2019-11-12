@@ -23,6 +23,7 @@ public class GameState : MonoBehaviour
     public UIStateManager uiManager;
     public LCDController lcdController;
 
+    public int mutationsPerLevel = 5;
     public int levelNumber = 0;
     public Text levelNumberText;
     public int score = 0;
@@ -43,6 +44,8 @@ public class GameState : MonoBehaviour
         levelNumber = 1;
 
         var dfa = GenerateLevel();
+        //for testing:
+        //dfa = mutateLevel(1, 15, dfa);
         startNode = dfa[0];
         startNode.IsCurrent = true;
         currentPosition = startNode;
@@ -167,7 +170,10 @@ public class GameState : MonoBehaviour
 
         foreach(DFAEdge e in allEdges)
         {
-            RerenderEdge(e);
+            if (e != null)
+            {
+                RerenderEdge(e);
+            }
         }
 
         currMaxVelocity *= 0.99f;
@@ -309,7 +315,7 @@ public class GameState : MonoBehaviour
         Color red = new Color(1, 0, 0);
         Color green = new Color(0, 1, 0);
         Color blue = new Color(0, 0, 1);
-
+      
         var dfa = new List<DFANode>();
 
         float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
@@ -356,6 +362,138 @@ public class GameState : MonoBehaviour
         SpawnEdge(dfa[5], dfa[6], green, "green");
 
         return dfa;
+    }
+    public List<DFANode> mutateLevel(int level, int mutationsPerLevel, List<DFANode> dfa)
+    {
+        Color red = new Color(1, 0, 0);
+        Color green = new Color(0, 1, 0);
+        Color blue = new Color(0, 0, 1);
+        Color color = red;
+
+        float z = 0;
+        float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
+        float maxX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMax;
+        float minY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMin;
+        float maxY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMax;
+
+        int nodeDiam = 1;
+        int padding = 1;
+        Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, z);
+        Vector3 xOffset = new Vector3(nodeDiam + padding, 0, 0);
+        Vector3 yOffset = new Vector3(0, -nodeDiam - padding, 0);
+
+        int columns = 3;
+        int rows = 2;
+        int rowPos = 2;
+        int colPos = 0;
+
+        string[] colors = { "red", "green", "blue" };
+        DFANode parentNode = null;
+        DFANode childNode = null;
+
+        string edgeColor = "";
+
+        for (int i = 0; i < level * mutationsPerLevel; i++)
+        {
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            //Create new edge
+            {
+                bool nodeHasColor = false;
+                while (nodeHasColor == false)
+                {
+                    parentNode = dfa[UnityEngine.Random.Range(0, dfa.Count - 1)];
+                    edgeColor = colors[UnityEngine.Random.Range(0, 3)];
+                    nodeHasColor = parentNode.HasEdge(edgeColor);
+                }
+                childNode = dfa[UnityEngine.Random.Range(0, dfa.Count)];
+
+
+                switch (edgeColor)
+                {
+                    case "red":
+                        color = red;
+                        break;
+                    case "green":
+                        color = green;
+                        break;
+                    case "blue":
+                        color = blue;
+                        break;
+                }
+
+                SpawnEdge(parentNode, childNode, color, edgeColor);
+            }
+            else //split a current edge
+            {
+                             
+                do
+                {
+                    parentNode = dfa[UnityEngine.Random.Range(0, dfa.Count - 1)];
+                } while (parentNode.edges.Count == 0);
+
+                var edgeToSplit = parentNode.edges[UnityEngine.Random.Range(0, parentNode.edges.Count)];
+                childNode = edgeToSplit.child;
+                color = edgeToSplit.GetColor();
+                edgeColor = edgeToSplit.GetColorStr();
+
+
+
+                //vector stuff
+
+                int x = 0;
+                int y = 0;
+                if (rows < columns)
+                {
+                    rowPos++;
+                    x = rowPos;
+                    y = rows + 1;
+                    if (rowPos >= columns)
+                    {
+                        rows++;
+                        colPos = 0;
+                        rowPos = 0;
+                    }
+                }
+                else
+                {
+                    colPos++;
+                    x = columns + 1;
+                    y = colPos;
+                    if (colPos >= rows)
+                    {
+                        columns++;
+                        colPos = 0;
+                        rowPos = 0;
+                    }
+                }
+
+                dfa.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+                var newNode = dfa[dfa.Count - 1];
+
+                //spawn an edge from parent to new
+                SpawnEdge(parentNode, newNode, color, edgeColor);
+                //spawn edge from new node to child
+                edgeColor = colors[UnityEngine.Random.Range(0, 3)];
+                switch (edgeColor)
+                {
+                    case "red":
+                        color = red;
+                        break;
+                    case "green":
+                        color = green;
+                        break;
+                    case "blue":
+                        color = blue;
+                        break;
+                }
+                SpawnEdge(newNode, childNode, color, edgeColor);
+                //remove the edge to split
+                Destroy(edgeToSplit);
+            }
+        }
+        
+        return dfa;
+
     }
 
 }
