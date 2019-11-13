@@ -52,7 +52,8 @@ public class LCDController : MonoBehaviour
         ColonDigit.enabled = false;
         StopCoroutine(coroutine);
     }
-
+    // need to make a public function that says how much time the clock starts at, using the systemTime, or Time.time, or systemdelta, then every update, you add the delta time to the total (this will give you how much time has elapsed.
+    // need the private variable lcdcontroller uses, and the function call that returns that, and in the update function, you increase the thing by the delta time
     IEnumerator TimerCoroutine(float time)
     {
         yield return new WaitForSeconds(time);

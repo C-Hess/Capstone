@@ -37,7 +37,7 @@ public class GameState : MonoBehaviour
     public float currMaxVelocity = 10.0f;
 
     public float restart = 1f;
-
+    private float timer = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -97,17 +97,25 @@ public class GameState : MonoBehaviour
 
     public void LevelWon()
     {
+        
         Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
         levelNumber += 1;
-        score = (int)lcdController.InitialTime;
-        scoreText.text = "Score" + score.ToString();
+        Debug.Log("This is the lcdcontroller initial time: "+ lcdController.InitialTime);
+        Debug.Log("This is the time.deltatime variable"+ Time.deltaTime);
+        Debug.Log("this is the score variable before:" + score);
+        
+        
+        score = (int)Mathf.Round((lcdController.InitialTime-timer)*100);
+        Debug.Log("This is the score variable after:" + score);
+        scoreText.text = "Score: " + score.ToString();
     }
 
     public void GameOver()
     {
+        
         Debug.Log("Failure!");
         lcdController.StopTimer();
         uiManager.SwitchLose();
@@ -117,6 +125,7 @@ public class GameState : MonoBehaviour
 
     public void RestartGame()
     {
+        Score.scoreValue = 0;
         Debug.Log("Restarting game...");
         Invoke("Restart", restart);
     }
@@ -134,6 +143,7 @@ public class GameState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timer += Time.deltaTime;
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
