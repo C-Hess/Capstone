@@ -43,24 +43,56 @@ public class GameState : MonoBehaviour
     {
         levelNumber = 1;
 
-        var dfa = GenerateLevel();
+        GenerateLevel(1,0);
         //for testing:
         //dfa = mutateLevel(1, 15, dfa);
-        startNode = dfa[0];
+        startNode = allNodes[0];
         startNode.IsCurrent = true;
         currentPosition = startNode;
-        endNode = dfa[6];
+        endNode = allNodes[6];
         endNode.gameObject.GetComponent<Image>().color = Color.red;
 
         var edges = FindMinPath();
         edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
-        for(int i = 0; i < edges.Count; i ++)
+        for (int i = 0; i < edges.Count; i++)
         {
             var newWire = Instantiate(possibleWires[i], bomb.transform);
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
 
+    }
+
+    public void NextLevel()
+    {
+        levelNumber++;
+        time = 30 + 5 * levelNumber;
+
+        foreach (var node in allNodes)
+        {
+            Destroy(node);
+
+        }
+        foreach (var edge in allEdges)
+        {
+            Destroy(edge);
+        }
+        GenerateLevel(levelNumber, mutationsPerLevel);
+
+        startNode = allNodes[0];
+        startNode.IsCurrent = true;
+        currentPosition = startNode;
+        endNode = allNodes[6];
+        endNode.gameObject.GetComponent<Image>().color = Color.red;
+
+        var edges = FindMinPath();
+        edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
+        for (int i = 0; i < edges.Count; i++)
+        {
+            var newWire = Instantiate(possibleWires[i], bomb.transform);
+            newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
+            newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
+        }
     }
 
     public void LevelWon()
@@ -70,7 +102,7 @@ public class GameState : MonoBehaviour
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
         levelNumber += 1;
-        score = (int) lcdController.InitialTime;
+        score = (int)lcdController.InitialTime;
         scoreText.text = "Score" + score.ToString();
     }
 
@@ -148,11 +180,11 @@ public class GameState : MonoBehaviour
             for (int e = 0; e < allNodes[n1].edges.Count; e++)
             {
                 DFANode connectedNode = allNodes[n1].edges[e].child;
-                if(connectedNode == allNodes[n1])
+                if (connectedNode == allNodes[n1])
                 {
                     connectedNode = allNodes[n1].edges[e].parent;
                 }
-                
+
 
                 Vector3 attractionDir = (connectedNode.gameObject.transform.localPosition - allNodes[n1].gameObject.transform.localPosition).normalized;
                 Vector3 force = attractionDir * attractionCoeff;
@@ -168,7 +200,7 @@ public class GameState : MonoBehaviour
             allNodes[n1].transform.localPosition += Mathf.Min(velocities[n1].magnitude, currMaxVelocity) * velocities[n1].normalized;
         }
 
-        foreach(DFAEdge e in allEdges)
+        foreach (DFAEdge e in allEdges)
         {
             if (e != null)
             {
@@ -178,7 +210,7 @@ public class GameState : MonoBehaviour
 
         currMaxVelocity *= 0.99f;
     }
-    
+
     /**
      * This method progresses through the dfa state given a wire that got cut.
      * 
@@ -304,18 +336,19 @@ public class GameState : MonoBehaviour
 
     private void ResetVisited()
     {
-        foreach (var node in allNodes) {
+        foreach (var node in allNodes)
+        {
             node.Visited = false;
         }
     }
 
-    public List<DFANode> GenerateLevel()
+    public void GenerateLevel(int level, int mutationsPerLevel)
     {
 
         Color red = new Color(1, 0, 0);
         Color green = new Color(0, 1, 0);
         Color blue = new Color(0, 0, 1);
-      
+
         var dfa = new List<DFANode>();
 
         float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
@@ -327,7 +360,7 @@ public class GameState : MonoBehaviour
 
         int nodeDiam = 1;
         int padding = 1;
-        Vector3 origin = new Vector3((minX + maxX)/2, (minY + maxY) / 2, z);
+        Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, z);
         Vector3 xOffset = new Vector3(nodeDiam + padding, 0, 0);
         Vector3 yOffset = new Vector3(0, -nodeDiam - padding, 0);
 
@@ -336,34 +369,34 @@ public class GameState : MonoBehaviour
 
         for (int i = 0; i < 7; i++)
         {
-            dfa.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+            allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
             x++;
-            if(x > 2)
+            if (x > 2)
             {
                 x = 0;
                 y++;
             }
         }
 
-        SpawnEdge(dfa[0], dfa[1], red, "red");
-        SpawnEdge(dfa[0], dfa[2], blue, "blue");
+        SpawnEdge(allNodes[0], allNodes[1], red, "red");
+        SpawnEdge(allNodes[0], allNodes[2], blue, "blue");
 
-        SpawnEdge(dfa[1], dfa[3], blue, "blue");
+        SpawnEdge(allNodes[1], allNodes[3], blue, "blue");
 
-        SpawnEdge(dfa[2], dfa[4], red, "red");
+        SpawnEdge(allNodes[2], allNodes[4], red, "red");
 
-        SpawnEdge(dfa[3], dfa[5], red, "red");
-        SpawnEdge(dfa[3], dfa[2], green, "green");
+        SpawnEdge(allNodes[3], allNodes[5], red, "red");
+        SpawnEdge(allNodes[3], allNodes[2], green, "green");
 
-        SpawnEdge(dfa[4], dfa[5], blue, "blue");
-        SpawnEdge(dfa[4], dfa[1], green, "green");
+        SpawnEdge(allNodes[4], allNodes[5], blue, "blue");
+        SpawnEdge(allNodes[4], allNodes[1], green, "green");
 
-        SpawnEdge(dfa[5], dfa[2], blue, "blue");
-        SpawnEdge(dfa[5], dfa[6], green, "green");
+        SpawnEdge(allNodes[5], allNodes[2], blue, "blue");
+        SpawnEdge(allNodes[5], allNodes[6], green, "green");
 
-        return dfa;
+        mutateLevel(level, mutationsPerLevel);
     }
-    public List<DFANode> mutateLevel(int level, int mutationsPerLevel, List<DFANode> dfa)
+    public void mutateLevel(int level, int mutationsPerLevel)
     {
         Color red = new Color(1, 0, 0);
         Color green = new Color(0, 1, 0);
@@ -401,11 +434,11 @@ public class GameState : MonoBehaviour
                 bool nodeHasColor = false;
                 while (nodeHasColor == false)
                 {
-                    parentNode = dfa[UnityEngine.Random.Range(0, dfa.Count - 1)];
+                    parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
                     edgeColor = colors[UnityEngine.Random.Range(0, 3)];
-                    nodeHasColor = parentNode.HasEdge(edgeColor);
+                    nodeHasColor = parentNode.HasOutgoingEdge(edgeColor);
                 }
-                childNode = dfa[UnityEngine.Random.Range(0, dfa.Count)];
+                childNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
 
 
                 switch (edgeColor)
@@ -425,10 +458,10 @@ public class GameState : MonoBehaviour
             }
             else //split a current edge
             {
-                             
+
                 do
                 {
-                    parentNode = dfa[UnityEngine.Random.Range(0, dfa.Count - 1)];
+                    parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
                 } while (parentNode.edges.Count == 0);
 
                 var edgeToSplit = parentNode.edges[UnityEngine.Random.Range(0, parentNode.edges.Count)];
@@ -467,8 +500,8 @@ public class GameState : MonoBehaviour
                     }
                 }
 
-                dfa.Add(SpawnNode(origin + xOffset * x + yOffset * y));
-                var newNode = dfa[dfa.Count - 1];
+                allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+                var newNode = allNodes[allNodes.Count - 1];
 
                 //spawn an edge from parent to new
                 SpawnEdge(parentNode, newNode, color, edgeColor);
@@ -488,12 +521,13 @@ public class GameState : MonoBehaviour
                 }
                 SpawnEdge(newNode, childNode, color, edgeColor);
                 //remove the edge to split
+
+                allEdges.Remove(edgeToSplit);
+                parentNode.edges.Remove(edgeToSplit);
+                childNode.edges.Remove(edgeToSplit);
                 Destroy(edgeToSplit);
             }
         }
-        
-        return dfa;
-
     }
-
 }
+
