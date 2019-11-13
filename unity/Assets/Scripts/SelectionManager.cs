@@ -3,7 +3,8 @@
 public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private string selectableTag = "Selectable";
-    
+    [SerializeField] private string otherTag = "Jumper";
+
 
     private ISelectionResponse _selectionResponse;
 
@@ -33,7 +34,7 @@ public class SelectionManager : MonoBehaviour
         if (Physics.Raycast(ray, out var hit))
         {
             var selection = hit.transform;
-            if (selection.CompareTag(selectableTag))
+            if (selection.CompareTag(selectableTag) || selection.CompareTag(otherTag))
             {
                 _selection = selection;
             }
