@@ -70,11 +70,13 @@ public class GameState : MonoBehaviour
 
         foreach (var node in allNodes)
         {
+            allNodes.Remove(node);
             Destroy(node);
 
         }
         foreach (var edge in allEdges)
         {
+            allEdges.Remove(edge);
             Destroy(edge);
         }
         GenerateLevel(levelNumber, mutationsPerLevel);
