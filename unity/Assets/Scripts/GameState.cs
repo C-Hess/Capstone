@@ -23,6 +23,7 @@ public class GameState : MonoBehaviour
     public UIStateManager uiManager;
     public LCDController lcdController;
 
+    public int mutationsPerLevel = 5;
     public int levelNumber = 0;
     public Text levelNumberText;
     public int score = 0;
@@ -37,22 +38,24 @@ public class GameState : MonoBehaviour
     public float currMaxVelocity = 10.0f;
 
     public float restart = 1f;
-
+    private float timer = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
         levelNumber = 1;
 
-        var dfa = GenerateLevel();
-        startNode = dfa[0];
+        GenerateLevel(1,0);
+        //for testing:
+        //dfa = mutateLevel(1, 15, dfa);
+        startNode = allNodes[0];
         startNode.IsCurrent = true;
         currentPosition = startNode;
-        endNode = dfa[6];
+        endNode = allNodes[6];
         endNode.gameObject.GetComponent<Image>().color = Color.red;
 
         var edges = FindMinPath();
         edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
-        for(int i = 0; i < edges.Count; i ++)
+        for (int i = 0; i < edges.Count; i++)
         {
             var newWire = Instantiate(possibleWires[i], bomb.transform);
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
@@ -61,19 +64,61 @@ public class GameState : MonoBehaviour
 
     }
 
+    public void NextLevel()
+    {
+        levelNumber++;
+        time = 30 + 5 * levelNumber;
+
+        foreach (var node in allNodes)
+        {
+            allNodes.Remove(node);
+            Destroy(node);
+
+        }
+        foreach (var edge in allEdges)
+        {
+            allEdges.Remove(edge);
+            Destroy(edge);
+        }
+        GenerateLevel(levelNumber, mutationsPerLevel);
+
+        startNode = allNodes[0];
+        startNode.IsCurrent = true;
+        currentPosition = startNode;
+        endNode = allNodes[6];
+        endNode.gameObject.GetComponent<Image>().color = Color.red;
+
+        var edges = FindMinPath();
+        edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
+        for (int i = 0; i < edges.Count; i++)
+        {
+            var newWire = Instantiate(possibleWires[i], bomb.transform);
+            newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
+            newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
+        }
+    }
+
     public void LevelWon()
     {
+        
         Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
         levelNumber += 1;
-        score = (int) lcdController.InitialTime;
-        scoreText.text = "Score" + score.ToString();
+        Debug.Log("This is the lcdcontroller initial time: "+ lcdController.InitialTime);
+        Debug.Log("This is the time.deltatime variable"+ Time.deltaTime);
+        Debug.Log("this is the score variable before:" + score);
+        
+        
+        score = (int)Mathf.Round((lcdController.InitialTime-timer)*100);
+        Debug.Log("This is the score variable after:" + score);
+        scoreText.text = "Score: " + score.ToString();
     }
 
     public void GameOver()
     {
+        
         Debug.Log("Failure!");
         lcdController.StopTimer();
         uiManager.SwitchLose();
@@ -83,6 +128,7 @@ public class GameState : MonoBehaviour
 
     public void RestartGame()
     {
+        Score.scoreValue = 0;
         Debug.Log("Restarting game...");
         Invoke("Restart", restart);
     }
@@ -100,6 +146,7 @@ public class GameState : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        timer += Time.deltaTime;
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -116,6 +163,9 @@ public class GameState : MonoBehaviour
             }
         }
     }
+
+
+
 
     void FixedUpdate()
     {
@@ -161,11 +211,11 @@ public class GameState : MonoBehaviour
             for (int e = 0; e < allNodes[n1].edges.Count; e++)
             {
                 DFANode connectedNode = allNodes[n1].edges[e].child;
-                if(connectedNode == allNodes[n1])
+                if (connectedNode == allNodes[n1])
                 {
                     connectedNode = allNodes[n1].edges[e].parent;
                 }
-                
+
 
                 Vector3 attractionDir = (connectedNode.gameObject.transform.localPosition - allNodes[n1].gameObject.transform.localPosition).normalized;
                 Vector3 force = attractionDir * attractionCoeff;
@@ -213,14 +263,22 @@ public class GameState : MonoBehaviour
             allNodes[n1].transform.localPosition += Mathf.Min(velocities[n1].magnitude, currMaxVelocity) * velocities[n1].normalized;
         }
 
-        foreach(DFAEdge e in allEdges)
+        foreach (DFAEdge e in allEdges)
         {
-            RerenderEdge(e);
+            if (e != null)
+            {
+                RerenderEdge(e);
+            }
         }
 
         //currMaxVelocity *= 0.99f;
     }
 
+    /**
+     * This method progresses through the dfa state given a wire that got cut.
+     * 
+     * @param wire - is the wire object that got cut
+     */
     public void Traverse(GameObject wire)
     {
         currentPosition.IsCurrent = false;
@@ -341,12 +399,13 @@ public class GameState : MonoBehaviour
 
     private void ResetVisited()
     {
-        foreach (var node in allNodes) {
+        foreach (var node in allNodes)
+        {
             node.Visited = false;
         }
     }
 
-    public List<DFANode> GenerateLevel()
+    public void GenerateLevel(int level, int mutationsPerLevel)
     {
 
         Color red = new Color(1, 0, 0);
@@ -364,7 +423,7 @@ public class GameState : MonoBehaviour
 
         int nodeDiam = 1;
         int padding = 1;
-        Vector3 origin = new Vector3((minX + maxX)/2, (minY + maxY) / 2, z);
+        Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, z);
         Vector3 xOffset = new Vector3(nodeDiam + padding, 0, 0);
         Vector3 yOffset = new Vector3(0, -nodeDiam - padding, 0);
 
@@ -373,32 +432,165 @@ public class GameState : MonoBehaviour
 
         for (int i = 0; i < 7; i++)
         {
-            dfa.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+            allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
             x++;
-            if(x > 2)
+            if (x > 2)
             {
                 x = 0;
                 y++;
             }
         }
 
-        SpawnEdge(dfa[0], dfa[1], red, "red");
-        SpawnEdge(dfa[0], dfa[2], blue, "blue");
+        SpawnEdge(allNodes[0], allNodes[1], red, "red");
+        SpawnEdge(allNodes[0], allNodes[2], blue, "blue");
 
-        SpawnEdge(dfa[1], dfa[3], blue, "blue");
+        SpawnEdge(allNodes[1], allNodes[3], blue, "blue");
 
-        SpawnEdge(dfa[2], dfa[4], red, "red");
+        SpawnEdge(allNodes[2], allNodes[4], red, "red");
 
-        SpawnEdge(dfa[3], dfa[5], red, "red");
-        SpawnEdge(dfa[3], dfa[2], green, "green");
+        SpawnEdge(allNodes[3], allNodes[5], red, "red");
+        SpawnEdge(allNodes[3], allNodes[2], green, "green");
 
-        SpawnEdge(dfa[4], dfa[5], blue, "blue");
-        SpawnEdge(dfa[4], dfa[1], green, "green");
+        SpawnEdge(allNodes[4], allNodes[5], blue, "blue");
+        SpawnEdge(allNodes[4], allNodes[1], green, "green");
 
-        SpawnEdge(dfa[5], dfa[2], blue, "blue");
-        SpawnEdge(dfa[5], dfa[6], green, "green");
+        SpawnEdge(allNodes[5], allNodes[2], blue, "blue");
+        SpawnEdge(allNodes[5], allNodes[6], green, "green");
 
-        return dfa;
+        mutateLevel(level, mutationsPerLevel);
     }
+    public void mutateLevel(int level, int mutationsPerLevel)
+    {
+        Color red = new Color(1, 0, 0);
+        Color green = new Color(0, 1, 0);
+        Color blue = new Color(0, 0, 1);
+        Color color = red;
 
+        float z = 0;
+        float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
+        float maxX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMax;
+        float minY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMin;
+        float maxY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMax;
+
+        int nodeDiam = 1;
+        int padding = 1;
+        Vector3 origin = new Vector3((minX + maxX) / 2, (minY + maxY) / 2, z);
+        Vector3 xOffset = new Vector3(nodeDiam + padding, 0, 0);
+        Vector3 yOffset = new Vector3(0, -nodeDiam - padding, 0);
+
+        int columns = 3;
+        int rows = 2;
+        int rowPos = 2;
+        int colPos = 0;
+
+        string[] colors = { "red", "green", "blue" };
+        DFANode parentNode = null;
+        DFANode childNode = null;
+
+        string edgeColor = "";
+
+        for (int i = 0; i < level * mutationsPerLevel; i++)
+        {
+            if (UnityEngine.Random.Range(0, 2) == 0)
+            //Create new edge
+            {
+                bool nodeHasColor = false;
+                while (nodeHasColor == false)
+                {
+                    parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
+                    edgeColor = colors[UnityEngine.Random.Range(0, 3)];
+                    nodeHasColor = parentNode.HasOutgoingEdge(edgeColor);
+                }
+                childNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
+
+
+                switch (edgeColor)
+                {
+                    case "red":
+                        color = red;
+                        break;
+                    case "green":
+                        color = green;
+                        break;
+                    case "blue":
+                        color = blue;
+                        break;
+                }
+
+                SpawnEdge(parentNode, childNode, color, edgeColor);
+            }
+            else //split a current edge
+            {
+
+                do
+                {
+                    parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
+                } while (parentNode.edges.Count == 0);
+
+                var edgeToSplit = parentNode.edges[UnityEngine.Random.Range(0, parentNode.edges.Count)];
+                childNode = edgeToSplit.child;
+                color = edgeToSplit.GetColor();
+                edgeColor = edgeToSplit.GetColorStr();
+
+
+
+                //vector stuff
+
+                int x = 0;
+                int y = 0;
+                if (rows < columns)
+                {
+                    rowPos++;
+                    x = rowPos;
+                    y = rows + 1;
+                    if (rowPos >= columns)
+                    {
+                        rows++;
+                        colPos = 0;
+                        rowPos = 0;
+                    }
+                }
+                else
+                {
+                    colPos++;
+                    x = columns + 1;
+                    y = colPos;
+                    if (colPos >= rows)
+                    {
+                        columns++;
+                        colPos = 0;
+                        rowPos = 0;
+                    }
+                }
+
+                allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+                var newNode = allNodes[allNodes.Count - 1];
+
+                //spawn an edge from parent to new
+                SpawnEdge(parentNode, newNode, color, edgeColor);
+                //spawn edge from new node to child
+                edgeColor = colors[UnityEngine.Random.Range(0, 3)];
+                switch (edgeColor)
+                {
+                    case "red":
+                        color = red;
+                        break;
+                    case "green":
+                        color = green;
+                        break;
+                    case "blue":
+                        color = blue;
+                        break;
+                }
+                SpawnEdge(newNode, childNode, color, edgeColor);
+                //remove the edge to split
+
+                allEdges.Remove(edgeToSplit);
+                parentNode.edges.Remove(edgeToSplit);
+                childNode.edges.Remove(edgeToSplit);
+                Destroy(edgeToSplit);
+            }
+        }
+    }
 }
+
