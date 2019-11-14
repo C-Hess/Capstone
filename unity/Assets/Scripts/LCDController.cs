@@ -18,9 +18,6 @@ public class LCDController : MonoBehaviour
     public Animator HundredthSecondDigit;
     public TimerExpireEvent timerExpireEvent;
 
-    [Range(0.0f, 99.99f)]
-    public float InitialTime = 60f;
-
     private Coroutine coroutine;
 
     // Start is called before the first frame update
@@ -30,11 +27,15 @@ public class LCDController : MonoBehaviour
         SecondDigit.SetFloat("TimeMultiplier", 0.1f);
         TenthSecondDigit.SetFloat("TimeMultiplier", 1f);
         HundredthSecondDigit.SetFloat("TimeMultiplier", 10f);
-        SetTimer(InitialTime);
     }
 
-    private void SetTimer(float time)
+    public void SetTimer(float time)
     {
+        TenSecondDigit.enabled = true;
+        SecondDigit.enabled = true;
+        TenthSecondDigit.enabled = true;
+        HundredthSecondDigit.enabled = true;
+        ColonDigit.enabled = true;
         TenSecondDigit.SetFloat("OffsetTime", 1.0f - (time /100f));
         SecondDigit.SetFloat("OffsetTime", 1.0f - (time % 10f / 10.0f));
         TenthSecondDigit.SetFloat("OffsetTime", 1.0f - (time * 10 % 10 / 10.0f));

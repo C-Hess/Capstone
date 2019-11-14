@@ -8,7 +8,6 @@ using System.Linq;
 
 public class GameState : MonoBehaviour
 {
-    public int time;
     private DFANode startNode;
     private DFANode currentPosition;
     private DFANode endNode;
@@ -24,7 +23,7 @@ public class GameState : MonoBehaviour
     public LCDController lcdController;
 
     public int mutationsPerLevel = 5;
-    public int levelNumber = 0;
+    public int levelNumber = 1;
     public Text levelNumberText;
     public int score = 0;
     public Text scoreText;
@@ -33,53 +32,43 @@ public class GameState : MonoBehaviour
 
 
     public float repulseCoeff = 3.2e+07f;
-    public float edgeRepulseCoeff = 3.2e+07f;
+    public float edgeRepulseCoeff = 6400f;
     public float attractionCoeff = 1000.0f;
-    public float currMaxVelocity = 10.0f;
+    public float initMaxVelocity = 10.0f;
+    private float currMaxVelocity;
 
     public float restart = 1f;
     private float timer = 0.0f;
+    private float levelStartTime = 0.0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        levelNumber = 1;
-
-        GenerateLevel(1,0);
-        //for testing:
-        //dfa = mutateLevel(1, 15, dfa);
-        startNode = allNodes[0];
-        startNode.IsCurrent = true;
-        currentPosition = startNode;
-        endNode = allNodes[6];
-        endNode.gameObject.GetComponent<Image>().color = Color.red;
-
-        var edges = FindMinPath();
-        edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
-        for (int i = 0; i < edges.Count; i++)
-        {
-            var newWire = Instantiate(possibleWires[i], bomb.transform);
-            newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
-            newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
-        }
-
+        NextLevel();
     }
 
     public void NextLevel()
     {
+        uiManager.SwitchGame();
+        currMaxVelocity = initMaxVelocity;
+
         levelNumber++;
-        time = 30 + 5 * levelNumber;
+        levelStartTime = Mathf.Min(90, 30 + 1.5f * levelNumber-1);
+        timer = 0;
 
         foreach (var node in allNodes)
         {
-            allNodes.Remove(node);
-            Destroy(node);
-
+            Destroy(node.gameObject);
         }
+        allNodes.Clear();
+
         foreach (var edge in allEdges)
         {
-            allEdges.Remove(edge);
-            Destroy(edge);
+            Destroy(edge.gameObject);
         }
+        allEdges.Clear();
+
         GenerateLevel(levelNumber, mutationsPerLevel);
 
         startNode = allNodes[0];
@@ -96,6 +85,8 @@ public class GameState : MonoBehaviour
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
+
+        lcdController.SetTimer(levelStartTime);
     }
 
     public void LevelWon()
@@ -106,12 +97,12 @@ public class GameState : MonoBehaviour
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
         levelNumber += 1;
-        Debug.Log("This is the lcdcontroller initial time: "+ lcdController.InitialTime);
+        Debug.Log("This is the lcdcontroller initial time: "+ levelStartTime);
         Debug.Log("This is the time.deltatime variable"+ Time.deltaTime);
         Debug.Log("this is the score variable before:" + score);
         
         
-        score = (int)Mathf.Round((lcdController.InitialTime-timer)*100);
+        score = (int)Mathf.Round((levelStartTime - timer)*100);
         Debug.Log("This is the score variable after:" + score);
         scoreText.text = "Score: " + score.ToString();
     }
@@ -164,9 +155,6 @@ public class GameState : MonoBehaviour
         }
     }
 
-
-
-
     void FixedUpdate()
     {
         float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
@@ -195,7 +183,7 @@ public class GameState : MonoBehaviour
             for (int n2 = 0; n2 < allNodes.Count; n2++)
             {
                 if (n1 == n2) continue;
-                float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, allNodes[n2].gameObject.transform.localPosition);
+                float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, allNodes[n2].gameObject.transform.localPosition) + 0.000001f;
                 Vector3 repulseDir = (allNodes[n1].gameObject.transform.localPosition - allNodes[n2].gameObject.transform.localPosition).normalized;
                 Vector3 force = repulseDir * (repulseCoeff / (distance * distance));
                 velocity += force * Time.fixedDeltaTime;
@@ -233,33 +221,20 @@ public class GameState : MonoBehaviour
                 Vector3 corner2 = canvasCorners[nextCorner];
 
                 Vector3 edge = corner2 - corner1;
-
-
                 Vector3 cornerDir = allNodes[n1].transform.position - corner1;
-
-
                 Vector3 edgePerp = edge.normalized * Vector3.Dot(edge, cornerDir) / edge.magnitude;
-
-
                 Vector3 forceDir = (cornerDir - edgePerp).normalized;
-
-                float distance = Vector3.Distance(cornerDir, edgePerp);
-
+                float distance = Vector3.Distance(cornerDir, edgePerp) + 0.00001f;
 
                 Vector3 force = forceDir * (edgeRepulseCoeff / (distance * distance * distance));
 
                 velocity += new Vector3(force.x, force.z, 0) * Time.fixedDeltaTime;
-           
             }
-
             velocities[n1] += velocity;
-
-
         }
 
         for (int n1 = 0; n1 < allNodes.Count; n1++)
         {
-
             allNodes[n1].transform.localPosition += Mathf.Min(velocities[n1].magnitude, currMaxVelocity) * velocities[n1].normalized;
         }
 
@@ -271,7 +246,7 @@ public class GameState : MonoBehaviour
             }
         }
 
-        //currMaxVelocity *= 0.99f;
+        currMaxVelocity *= 0.99f;
     }
 
     /**
@@ -432,7 +407,7 @@ public class GameState : MonoBehaviour
 
         for (int i = 0; i < 7; i++)
         {
-            allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+            SpawnNode(origin + xOffset * x + yOffset * y);
             x++;
             if (x > 2)
             {
@@ -456,7 +431,7 @@ public class GameState : MonoBehaviour
 
         SpawnEdge(allNodes[5], allNodes[2], blue, "blue");
         SpawnEdge(allNodes[5], allNodes[6], green, "green");
-
+        
         mutateLevel(level, mutationsPerLevel);
     }
     public void mutateLevel(int level, int mutationsPerLevel)
@@ -588,7 +563,7 @@ public class GameState : MonoBehaviour
                 allEdges.Remove(edgeToSplit);
                 parentNode.edges.Remove(edgeToSplit);
                 childNode.edges.Remove(edgeToSplit);
-                Destroy(edgeToSplit);
+                Destroy(edgeToSplit.gameObject);
             }
         }
     }
