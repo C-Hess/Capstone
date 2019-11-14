@@ -60,4 +60,10 @@ public class LCDController : MonoBehaviour
         StopTimer();
         timerExpireEvent.Invoke();
     }
+    public void subtractTime(float time, float change)
+    {
+        StopCoroutine(coroutine);
+        TenSecondDigit.SetFloat("OffsetTime", 1.0f - (time / 100f));
+        coroutine = StartCoroutine(TimerCoroutine(change));
+    }
 }
