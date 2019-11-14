@@ -50,6 +50,7 @@ public class GameState : MonoBehaviour
     public float restart = 1f;
     private float timer = 0.0f;
     private float levelStartTime = 0.0f;
+    private float newStartTime = 0.0f;
 
 
     // Start is called before the first frame update
@@ -65,6 +66,7 @@ public class GameState : MonoBehaviour
 
         levelNumber++;
         levelStartTime = Mathf.Min(90, 30 + 1.5f * levelNumber-1);
+        newStartTime = levelStartTime;
         timer = 0;
 
         foreach (var node in allNodes)
@@ -294,9 +296,10 @@ public class GameState : MonoBehaviour
     //I think this is working but idk how to correctly subtract time in the LCDController
     public void Jumper(GameObject jumper)
     {
-        if(lcdController.InitialTime - timer > 10)
+        if(levelStartTime - timer > 10)
         {
-            lcdController.subtractTime(lcdController.InitialTime - 10, lcdController.InitialTime - timer - 10);
+            lcdController.subtractTime(newStartTime - 10, levelStartTime - timer - 10);
+            newStartTime -= 10;
             timer += 10;
         } else
         {
