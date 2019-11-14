@@ -79,6 +79,17 @@ namespace DFAGraph
             return false;
         }
 
+        public bool HasOutgoingEdge(string color)
+        {
+            foreach (DFAEdge edge in edges)
+            {
+                if (edge.GetColorStr() == color && edge.parent == this)
+                    return true;
+            }
+            return false;
+        }
+
+
         public IEnumerable<DFANode> GetChildNodes()
         {
             return edges.Select(x => x.child);
