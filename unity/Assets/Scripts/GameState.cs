@@ -246,7 +246,7 @@ public class GameState : MonoBehaviour
             }
         }
 
-        currMaxVelocity *= 0.99f;
+        currMaxVelocity *= 0.9925f;
     }
 
     /**
@@ -538,7 +538,7 @@ public class GameState : MonoBehaviour
                     }
                 }
 
-                allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+                SpawnNode(origin + xOffset * x + yOffset * y);
                 var newNode = allNodes[allNodes.Count - 1];
 
                 //spawn an edge from parent to new
