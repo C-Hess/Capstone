@@ -34,63 +34,53 @@ public class GameState : MonoBehaviour
     public LCDController lcdController;
 
     public int mutationsPerLevel = 5;
-    public int levelNumber = 0;
+    public int levelNumber = 1;
     public Text levelNumberText;
     public int score = 0;
     public Text scoreText;
     public Text endScoreText;
     public Text endLevelNumberText;
 
-    public float repulseCoeff = 0.0001f;
-    public float attractionCoeff = 0.001f;
-    public float currMaxVelocity = 10.0f;
+    public float repulseCoeff = 3.2e+07f;
+    public float edgeRepulseCoeff = 6400f;
+    public float attractionCoeff = 1000.0f;
+    public float initMaxVelocity = 10.0f;
+    private float currMaxVelocity;
 
     public float restart = 1f;
     private float timer = 0.0f;
+    private float levelStartTime = 0.0f;
+    private float newStartTime = 0.0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        startNode.IsCurrent = true;
-        currentPosition = startNode;
-        endNode = allNodes[6];
-        endNode.gameObject.GetComponent<Image>().color = Color.red;
-
-        var edges = FindMinPath();
-        edges = edges.OrderBy(x => UnityEngine.Random.Range(0, edges.Count - 1)).ToList();
-        for (int i = 0; i < edges.Count; i++)
-        {
-            var newWire = Instantiate(possibleWires[i], bomb.transform);
-            newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
-            newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
-        }
-
-        //Not sure why its not setting colors and adding the jumpers to the scene if I remove them.
-
-        for (int i = 0; i < 6; i++)
-        {
-            var newJumper = Instantiate(jumpers[i], bomb.transform);
-            newJumper.GetComponent<Renderer>().material.color = allWireColors[i].color;
-            newJumper.GetComponent<JumperColor>().color = allWireColors[i].label;
-        }
-
+        NextLevel();
     }
 
     public void NextLevel()
     {
+        uiManager.SwitchGame();
+        currMaxVelocity = initMaxVelocity;
+
         levelNumber++;
-        time = 30 + 5 * levelNumber;
+        levelStartTime = Mathf.Min(90, 30 + 1.5f * levelNumber-1);
+        newStartTime = levelStartTime;
+        timer = 0;
 
         foreach (var node in allNodes)
         {
-            allNodes.Remove(node);
-            Destroy(node);
-
+            Destroy(node.gameObject);
         }
+        allNodes.Clear();
+
         foreach (var edge in allEdges)
         {
-            allEdges.Remove(edge);
-            Destroy(edge);
+            Destroy(edge.gameObject);
         }
+        allEdges.Clear();
+
         GenerateLevel(levelNumber, mutationsPerLevel);
 
         startNode = allNodes[0];
@@ -107,6 +97,15 @@ public class GameState : MonoBehaviour
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
         }
+        
+        for (int i = 0; i < 6; i++)
+        {
+            var newJumper = Instantiate(jumpers[i], bomb.transform);
+            newJumper.GetComponent<Renderer>().material.color = allWireColors[i].color;
+            newJumper.GetComponent<JumperColor>().color = allWireColors[i].label;
+        }
+
+        lcdController.SetTimer(levelStartTime);
     }
 
     public void LevelWon()
@@ -115,12 +114,13 @@ public class GameState : MonoBehaviour
         lcdController.StopTimer();
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
-        Debug.Log("This is the lcdcontroller initial time: "+ lcdController.InitialTime);
+        levelNumber += 1;
+        Debug.Log("This is the lcdcontroller initial time: "+ levelStartTime);
         Debug.Log("This is the time.deltatime variable"+ Time.deltaTime);
         Debug.Log("this is the score variable before:" + score);
-
-        levelNumber = levelNumber + 1;
-        score = (int)Mathf.Round((lcdController.InitialTime-timer)*100);
+        
+        
+        score = (int)Mathf.Round((levelStartTime - timer)*100);
         Debug.Log("This is the score variable after:" + score);
         scoreText.text = "Score: " + score.ToString();
     }
@@ -175,11 +175,26 @@ public class GameState : MonoBehaviour
         }
     }
 
-
-
-
     void FixedUpdate()
     {
+        float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
+        float maxX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMax;
+        float minY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMin;
+        float maxY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMax;
+
+        Vector3[] canvasCorners = new Vector3[]
+        {
+            new Vector3(minX, minY),
+            new Vector3(maxX, minY),
+            new Vector3(maxX, maxY),
+            new Vector3(minX, maxY),
+        };
+
+        for (int i = 0; i < canvasCorners.Length; i ++)
+        {
+            canvasCorners[i] = canvas.transform.TransformPoint(canvasCorners[i]);
+        }
+
         var velocities = new List<Vector3>();
         for (int n1 = 0; n1 < allNodes.Count; n1++)
         {
@@ -188,7 +203,7 @@ public class GameState : MonoBehaviour
             for (int n2 = 0; n2 < allNodes.Count; n2++)
             {
                 if (n1 == n2) continue;
-                float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, allNodes[n2].gameObject.transform.localPosition);
+                float distance = Vector3.Distance(allNodes[n1].gameObject.transform.localPosition, allNodes[n2].gameObject.transform.localPosition) + 0.000001f;
                 Vector3 repulseDir = (allNodes[n1].gameObject.transform.localPosition - allNodes[n2].gameObject.transform.localPosition).normalized;
                 Vector3 force = repulseDir * (repulseCoeff / (distance * distance));
                 velocity += force * Time.fixedDeltaTime;
@@ -214,13 +229,32 @@ public class GameState : MonoBehaviour
                 Vector3 force = attractionDir * attractionCoeff;
                 velocity += force * Time.fixedDeltaTime;
             }
-            velocities[n1] += velocity;
 
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 corner1 = canvasCorners[i];
+                int nextCorner = i + 1;
+                if (nextCorner >= 4)
+                {
+                    nextCorner -= 4;
+                }
+                Vector3 corner2 = canvasCorners[nextCorner];
+
+                Vector3 edge = corner2 - corner1;
+                Vector3 cornerDir = allNodes[n1].transform.position - corner1;
+                Vector3 edgePerp = edge.normalized * Vector3.Dot(edge, cornerDir) / edge.magnitude;
+                Vector3 forceDir = (cornerDir - edgePerp).normalized;
+                float distance = Vector3.Distance(cornerDir, edgePerp) + 0.00001f;
+
+                Vector3 force = forceDir * (edgeRepulseCoeff / (distance * distance * distance));
+
+                velocity += new Vector3(force.x, force.z, 0) * Time.fixedDeltaTime;
+            }
+            velocities[n1] += velocity;
         }
 
         for (int n1 = 0; n1 < allNodes.Count; n1++)
         {
-
             allNodes[n1].transform.localPosition += Mathf.Min(velocities[n1].magnitude, currMaxVelocity) * velocities[n1].normalized;
         }
 
@@ -232,7 +266,7 @@ public class GameState : MonoBehaviour
             }
         }
 
-        currMaxVelocity *= 0.99f;
+        currMaxVelocity *= 0.9925f;
     }
 
     /**
@@ -262,9 +296,10 @@ public class GameState : MonoBehaviour
     //I think this is working but idk how to correctly subtract time in the LCDController
     public void Jumper(GameObject jumper)
     {
-        if(lcdController.InitialTime - timer > 10)
+        if(levelStartTime - timer > 10)
         {
-            lcdController.subtractTime(lcdController.InitialTime - 10, lcdController.InitialTime - timer - 10);
+            lcdController.subtractTime(newStartTime - 10, levelStartTime - timer - 10);
+            newStartTime -= 10;
             timer += 10;
         } else
         {
@@ -423,7 +458,7 @@ public class GameState : MonoBehaviour
 
         for (int i = 0; i < 7; i++)
         {
-            allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+            SpawnNode(origin + xOffset * x + yOffset * y);
             x++;
             if (x > 2)
             {
@@ -447,7 +482,7 @@ public class GameState : MonoBehaviour
 
         SpawnEdge(allNodes[5], allNodes[2], blue, "blue");
         SpawnEdge(allNodes[5], allNodes[6], green, "green");
-
+        
         mutateLevel(level, mutationsPerLevel);
     }
     public void mutateLevel(int level, int mutationsPerLevel)
@@ -554,7 +589,7 @@ public class GameState : MonoBehaviour
                     }
                 }
 
-                allNodes.Add(SpawnNode(origin + xOffset * x + yOffset * y));
+                SpawnNode(origin + xOffset * x + yOffset * y);
                 var newNode = allNodes[allNodes.Count - 1];
 
                 //spawn an edge from parent to new
@@ -579,7 +614,7 @@ public class GameState : MonoBehaviour
                 allEdges.Remove(edgeToSplit);
                 parentNode.edges.Remove(edgeToSplit);
                 childNode.edges.Remove(edgeToSplit);
-                Destroy(edgeToSplit);
+                Destroy(edgeToSplit.gameObject);
             }
         }
     }
