@@ -31,8 +31,9 @@ public class GameState : MonoBehaviour
     public Text endLevelNumberText;
 
 
-    public float repulseCoeff = 0.0001f;
-    public float attractionCoeff = 0.001f;
+    public float repulseCoeff = 3.2e+07f;
+    public float edgeRepulseCoeff = 3.2e+07f;
+    public float attractionCoeff = 1000.0f;
     public float currMaxVelocity = 10.0f;
 
     public float restart = 1f;
@@ -118,6 +119,24 @@ public class GameState : MonoBehaviour
 
     void FixedUpdate()
     {
+        float minX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMin;
+        float maxX = canvas.GetComponent<RectTransform>().position.x + canvas.GetComponent<RectTransform>().rect.xMax;
+        float minY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMin;
+        float maxY = canvas.GetComponent<RectTransform>().position.y + canvas.GetComponent<RectTransform>().rect.yMax;
+
+        Vector3[] canvasCorners = new Vector3[]
+        {
+            new Vector3(minX, minY),
+            new Vector3(maxX, minY),
+            new Vector3(maxX, maxY),
+            new Vector3(minX, maxY),
+        };
+
+        for (int i = 0; i < canvasCorners.Length; i ++)
+        {
+            canvasCorners[i] = canvas.transform.TransformPoint(canvasCorners[i]);
+        }
+
         var velocities = new List<Vector3>();
         for (int n1 = 0; n1 < allNodes.Count; n1++)
         {
@@ -152,7 +171,39 @@ public class GameState : MonoBehaviour
                 Vector3 force = attractionDir * attractionCoeff;
                 velocity += force * Time.fixedDeltaTime;
             }
+
+            for (int i = 0; i < 4; i++)
+            {
+                Vector3 corner1 = canvasCorners[i];
+                int nextCorner = i + 1;
+                if (nextCorner >= 4)
+                {
+                    nextCorner -= 4;
+                }
+                Vector3 corner2 = canvasCorners[nextCorner];
+
+                Vector3 edge = corner2 - corner1;
+
+
+                Vector3 cornerDir = allNodes[n1].transform.position - corner1;
+
+
+                Vector3 edgePerp = edge.normalized * Vector3.Dot(edge, cornerDir) / edge.magnitude;
+
+
+                Vector3 forceDir = (cornerDir - edgePerp).normalized;
+
+                float distance = Vector3.Distance(cornerDir, edgePerp);
+
+
+                Vector3 force = forceDir * (edgeRepulseCoeff / (distance * distance * distance));
+
+                velocity += new Vector3(force.x, force.z, 0) * Time.fixedDeltaTime;
+           
+            }
+
             velocities[n1] += velocity;
+
 
         }
 
@@ -167,7 +218,7 @@ public class GameState : MonoBehaviour
             RerenderEdge(e);
         }
 
-        currMaxVelocity *= 0.99f;
+        //currMaxVelocity *= 0.99f;
     }
 
     public void Traverse(GameObject wire)
