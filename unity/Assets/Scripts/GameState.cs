@@ -520,8 +520,8 @@ public class GameState : MonoBehaviour
             if (UnityEngine.Random.Range(0, 2) == 0)
             //Create new edge
             {
-                bool nodeHasColor = false;
-                while (nodeHasColor == false)
+                bool nodeHasColor = true;
+                while (nodeHasColor)
                 {
                     parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
                     edgeColor = colors[UnityEngine.Random.Range(0, 3)];

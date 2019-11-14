@@ -661,6 +661,7 @@ MonoBehaviour:
     label: black
   uiManager: {fileID: 150253564}
   lcdController: {fileID: 1191761420}
+  mutationsPerLevel: 1
   levelNumber: 0
   levelNumberText: {fileID: 1742084684}
   score: 0
@@ -668,8 +669,9 @@ MonoBehaviour:
   endScoreText: {fileID: 769081711}
   endLevelNumberText: {fileID: 834845522}
   repulseCoeff: 32000000
+  edgeRepulseCoeff: 6400
   attractionCoeff: 1000
-  currMaxVelocity: 10
+  initMaxVelocity: 10
   restart: 1
 --- !u!114 &1742084684 stripped
 MonoBehaviour:
@@ -1122,6 +1124,16 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1568713023}
+    - target: {fileID: 4633047723752744951, guid: 5e547104099283648a2e3eb93652bc48,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 217.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4633047724742839483, guid: 5e547104099283648a2e3eb93652bc48,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 1914
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e547104099283648a2e3eb93652bc48, type: 3}
 --- !u!1001 &6518737610467848539
@@ -1205,6 +1217,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7366100989368327007, guid: 0bbb3914a89081c48871c2edf66c4f31,
+        type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 318233008}
     - target: {fileID: 7366100989368327006, guid: 0bbb3914a89081c48871c2edf66c4f31,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1310,10 +1327,5 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 7366100989368327007, guid: 0bbb3914a89081c48871c2edf66c4f31,
-        type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 318233008}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bbb3914a89081c48871c2edf66c4f31, type: 3}
