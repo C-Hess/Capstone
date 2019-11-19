@@ -553,7 +553,11 @@ public class GameState : MonoBehaviour
                     parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
                 } while (parentNode.edges.Count == 0);
 
-                var edgeToSplit = parentNode.edges[UnityEngine.Random.Range(0, parentNode.edges.Count)];
+                
+		var outEdges = parentNode.edges.Select(x => x.parent == parentNode).toList();
+		var edgeToSplit = outEdges[UnityEngine.Random.Range(0, outEdges.Count)];
+
+
                 childNode = edgeToSplit.child;
                 color = edgeToSplit.GetColor();
                 edgeColor = edgeToSplit.GetColorStr();
