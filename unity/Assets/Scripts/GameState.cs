@@ -52,11 +52,20 @@ public class GameState : MonoBehaviour
     private float levelStartTime = 0.0f;
     private float newStartTime = 0.0f;
 
+    private List<GameObject> wires = new List<GameObject>();
+
 
     // Start is called before the first frame update
     void Start()
     {
         NextLevel();
+
+        for (int i = 0; i < 6; i++)
+        {
+            var newJumper = Instantiate(jumpers[i], bomb.transform);
+            newJumper.GetComponent<Renderer>().material.color = allWireColors[i].color;
+            newJumper.GetComponent<JumperColor>().color = allWireColors[i].label;
+        }
     }
 
     public void NextLevel()
@@ -96,13 +105,7 @@ public class GameState : MonoBehaviour
             var newWire = Instantiate(possibleWires[i], bomb.transform);
             newWire.GetComponent<Renderer>().material.color = edges[i].GetColor();
             newWire.GetComponent<DFAWire>().color = edges[i].GetColorStr();
-        }
-        
-        for (int i = 0; i < 6; i++)
-        {
-            var newJumper = Instantiate(jumpers[i], bomb.transform);
-            newJumper.GetComponent<Renderer>().material.color = allWireColors[i].color;
-            newJumper.GetComponent<JumperColor>().color = allWireColors[i].label;
+            wires.Add(newWire);
         }
 
         lcdController.SetTimer(levelStartTime);
@@ -114,15 +117,21 @@ public class GameState : MonoBehaviour
         lcdController.StopTimer();
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
-        levelNumber += 1;
         Debug.Log("This is the lcdcontroller initial time: "+ levelStartTime);
         Debug.Log("This is the time.deltatime variable"+ Time.deltaTime);
         Debug.Log("this is the score variable before:" + score);
         
-        
-        score = (int)Mathf.Round((levelStartTime - timer)*100);
+        score += (int)Mathf.Round((levelStartTime - timer)*100);
         Debug.Log("This is the score variable after:" + score);
         scoreText.text = "Score: " + score.ToString();
+
+        foreach (var wire in wires)
+        {
+            Destroy(wire);
+        }
+
+        wires.Clear();
+
     }
 
     public void GameOver()
@@ -547,17 +556,21 @@ public class GameState : MonoBehaviour
             }
             else //split a current edge
             {
+                List<DFAEdge> outEdges;
 
                 do
                 {
                     parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
-                } while (parentNode.edges.Count == 0);
+                    outEdges = parentNode.edges.Where((other) => other.parent == parentNode).ToList();
+                } while (outEdges.Count == 0);
+
 
                 
-		var outEdges = parentNode.edges.Select(x => x.parent == parentNode).toList();
-		var edgeToSplit = outEdges[UnityEngine.Random.Range(0, outEdges.Count)];
-
-
+                Debug.Log(outEdges.Count);
+                var index = UnityEngine.Random.Range(0, outEdges.Count);
+                Debug.Log(index);
+                var edgeToSplit = outEdges[index];
+                
                 childNode = edgeToSplit.child;
                 color = edgeToSplit.GetColor();
                 edgeColor = edgeToSplit.GetColorStr();

@@ -661,7 +661,7 @@ MonoBehaviour:
     label: black
   uiManager: {fileID: 150253564}
   lcdController: {fileID: 1191761420}
-  mutationsPerLevel: 1
+  mutationsPerLevel: 2
   levelNumber: 0
   levelNumberText: {fileID: 1742084684}
   score: 0
@@ -1114,6 +1114,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1568713023}
+    - target: {fileID: 4633047724696876050, guid: 5e547104099283648a2e3eb93652bc48,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: NextLevel
+      objectReference: {fileID: 0}
     - target: {fileID: 4633047723647350770, guid: 5e547104099283648a2e3eb93652bc48,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
