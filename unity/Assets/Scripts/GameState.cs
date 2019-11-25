@@ -535,9 +535,14 @@ public class GameState : MonoBehaviour
                     parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
                     edgeColor = colors[UnityEngine.Random.Range(0, 3)];
                     nodeHasColor = parentNode.HasOutgoingEdge(edgeColor);
-                }
-                childNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
 
+                }
+		
+		//Remove the do-while loop to enable recursive edges (edge going from a node to itself)
+		do
+		{
+                childNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
+		}while(childNode == parentNode);
 
                 switch (edgeColor)
                 {
