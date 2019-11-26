@@ -526,7 +526,8 @@ public class GameState : MonoBehaviour
 
         for (int i = 0; i < level * mutationsPerLevel; i++)
         {
-            if (UnityEngine.Random.Range(0, 2) == 0)
+            int mutationType = UnityEngine.Random.Range(0, 3);
+            if (mutationType == 0)
             //Create new edge
             {
                 bool nodeHasColor = true;
@@ -538,11 +539,11 @@ public class GameState : MonoBehaviour
 
                 }
 		
-		//Remove the do-while loop to enable recursive edges (edge going from a node to itself)
-		do
-		{
-                childNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
-		}while(childNode == parentNode);
+		        //Remove the do-while loop to enable recursive edges (edge going from a node to itself)
+		        do
+		        {
+                    childNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
+		        } while(childNode == parentNode);
 
                 switch (edgeColor)
                 {
@@ -559,21 +560,17 @@ public class GameState : MonoBehaviour
 
                 SpawnEdge(parentNode, childNode, color, edgeColor);
             }
-            else //split a current edge
+            else if(mutationType == 1) //split a current edge
             {
                 List<DFAEdge> outEdges;
 
                 do
                 {
-                    parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
+                    parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
                     outEdges = parentNode.edges.Where((other) => other.parent == parentNode).ToList();
                 } while (outEdges.Count == 0);
-
-
                 
-                Debug.Log(outEdges.Count);
                 var index = UnityEngine.Random.Range(0, outEdges.Count);
-                Debug.Log(index);
                 var edgeToSplit = outEdges[index];
                 
                 childNode = edgeToSplit.child;
@@ -637,6 +634,35 @@ public class GameState : MonoBehaviour
                 parentNode.edges.Remove(edgeToSplit);
                 childNode.edges.Remove(edgeToSplit);
                 Destroy(edgeToSplit.gameObject);
+            }
+            else
+            {
+                var randNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count)];
+                var randEdge = randNode.edges[UnityEngine.Random.Range(0, randNode.edges.Count)];
+                var allOutColors = randNode.edges.Select(other => other.GetColorStr()).ToList();
+                var missingColors = colors.Where(other => !allOutColors.Contains(other)).ToList();
+
+                if(missingColors.Count > 0)
+                {
+                    var newColor = missingColors[UnityEngine.Random.Range(0, missingColors.Count)];
+                    switch(newColor)
+                    {
+                        case "red":
+                            randEdge.SetColor(red, newColor);
+                            break;
+                        case "green":
+                            randEdge.SetColor(green, newColor);
+                            break;
+                        case "blue":
+                            randEdge.SetColor(blue, newColor);
+                            break;
+                    }
+                }
+                else
+                {
+                    i--;
+                }
+
             }
         }
     }
