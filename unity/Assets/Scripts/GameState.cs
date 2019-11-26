@@ -443,9 +443,9 @@ public class GameState : MonoBehaviour
     public void GenerateLevel(int level, int mutationsPerLevel)
     {
 
-        Color red = new Color(1, 0, 0);
-        Color green = new Color(0, 1, 0);
-        Color blue = new Color(0, 0, 1);
+        Color blue = allWireColors[0].color;
+        Color red = allWireColors[1].color;
+        Color green = allWireColors[2].color;
 
         var dfa = new List<DFANode>();
 
@@ -496,9 +496,12 @@ public class GameState : MonoBehaviour
     }
     public void mutateLevel(int level, int mutationsPerLevel)
     {
-        Color red = new Color(1, 0, 0);
-        Color green = new Color(0, 1, 0);
-        Color blue = new Color(0, 0, 1);
+        Color blue = allWireColors[0].color;
+        Color red = allWireColors[1].color;
+        Color green = allWireColors[2].color;
+        Color purple = allWireColors[3].color;
+        Color gray = allWireColors[4].color;
+        Color black = allWireColors[5].color;
         Color color = red;
 
         float z = 0;
@@ -518,7 +521,7 @@ public class GameState : MonoBehaviour
         int rowPos = 2;
         int colPos = 0;
 
-        string[] colors = { "red", "green", "blue" };
+        string[] colors = { "red", "green", "blue", "black", "gray", "purple" };
         DFANode parentNode = null;
         DFANode childNode = null;
 
@@ -534,7 +537,7 @@ public class GameState : MonoBehaviour
                 while (nodeHasColor)
                 {
                     parentNode = allNodes[UnityEngine.Random.Range(0, allNodes.Count - 1)];
-                    edgeColor = colors[UnityEngine.Random.Range(0, 3)];
+                    edgeColor = colors[UnityEngine.Random.Range(0, 6)];
                     nodeHasColor = parentNode.HasOutgoingEdge(edgeColor);
 
                 }
@@ -555,6 +558,15 @@ public class GameState : MonoBehaviour
                         break;
                     case "blue":
                         color = blue;
+                        break;
+                    case "black":
+                        color = black;
+                        break;
+                    case "gray":
+                        color = gray;
+                        break;
+                    case "purple":
+                        color = purple;
                         break;
                 }
 
@@ -614,7 +626,7 @@ public class GameState : MonoBehaviour
                 //spawn an edge from parent to new
                 SpawnEdge(parentNode, newNode, color, edgeColor);
                 //spawn edge from new node to child
-                edgeColor = colors[UnityEngine.Random.Range(0, 3)];
+                edgeColor = colors[UnityEngine.Random.Range(0, 6)];
                 switch (edgeColor)
                 {
                     case "red":
@@ -625,6 +637,15 @@ public class GameState : MonoBehaviour
                         break;
                     case "blue":
                         color = blue;
+                        break;
+                    case "black":
+                        color = black;
+                        break;
+                    case "gray":
+                        color = gray;
+                        break;
+                    case "purple":
+                        color = purple;
                         break;
                 }
                 SpawnEdge(newNode, childNode, color, edgeColor);
@@ -656,6 +677,16 @@ public class GameState : MonoBehaviour
                         case "blue":
                             randEdge.SetColor(blue, newColor);
                             break;
+                        case "black":
+                            randEdge.SetColor(black, newColor);
+                            break;
+                        case "gray":
+                            randEdge.SetColor(gray, newColor);
+                            break;
+                        case "purple":
+                            randEdge.SetColor(purple, newColor);
+                            break;
+                            
                     }
                 }
                 else
