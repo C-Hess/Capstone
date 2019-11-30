@@ -127,7 +127,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &80655419
 RectTransform:
   m_ObjectHideFlags: 0
@@ -749,30 +749,19 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '- Every level you begin on a blue circle known as the start state
+  m_Text: '- Every level a new bomb is created
 
-    - Your goal is to reach the red state known as the end state
+    - You begin on the blue circle, and must find a path to reach the red circle before
+    the timer which is located on the right side reaches 0
 
-    - Every time a level begins, a new automata is created, and the shortest path
-    is found from the start state to the ends state
+    - There are 6 buttons that can be clicked known as "jumper wires", these are useful
+    in case you mess up and cut the wrong wire. Pressing the wire will move you from
+    your current state to the state of the buttons color at the cost of -10 seconds
 
-    - In order to traverse the automata and reach the end state you need to cut wires.
-    These wires correspond to the path you must take to reach the end state
+    - Your goal is to defuse as many bombs as possible to and get the highest score
+    possible
 
-    - Every time you cut a wire, you advance to a new current state depending on which
-    wire you cut
-
-    - If you run out of wires to cut, there are six jumper wires you are able to press
-    to advance you to the next state (at the cost of -10 seconds)
-
-    - As you traverse the automata, a clock is counting down. If the clock reaches
-    0 seconds it is game over
-
-    - Your score depends on how much time remains at the end of each leve once the
-    bomb is defusedl
-
-    - Your goal is to try and defuse as many bombs as possible using as little time
-    as you can'
+    - Levels increase in difficulty'
 --- !u!222 &662667955
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1061,7 +1050,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1085333511
 RectTransform:
   m_ObjectHideFlags: 0
