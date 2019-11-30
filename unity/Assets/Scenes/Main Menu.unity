@@ -749,9 +749,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '- Every level a new bomb is created
+  m_Text: '- Every level a random bomb is created
 
-    - You begin on the blue circle, and must find a path to reach the red circle before
+    - You begin on the blue circle, and must find a path to reach the red circle by cutting an acceptable sequence of wires before
     the timer which is located on the right side reaches 0
 
     - There are 6 buttons that can be clicked known as "jumper wires", these are useful
