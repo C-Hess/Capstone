@@ -18,7 +18,7 @@ public class LCDController : MonoBehaviour
     public Animator HundredthSecondDigit;
     public TimerExpireEvent timerExpireEvent;
 
-    private Coroutine coroutine;
+    private Coroutine coroutine = null;
 
     // Start is called before the first frame update
     void Start()
@@ -36,23 +36,46 @@ public class LCDController : MonoBehaviour
         TenthSecondDigit.enabled = true;
         HundredthSecondDigit.enabled = true;
         ColonDigit.enabled = true;
-        TenSecondDigit.SetFloat("OffsetTime", 1.0f - (time /100f));
+
+        TenSecondDigit.SetFloat("OffsetTime", 1.0f - (time/100f));
+        TenSecondDigit.Play(0, -1, 0);
+
         SecondDigit.SetFloat("OffsetTime", 1.0f - (time % 10f / 10.0f));
+        SecondDigit.Play(0, -1, 0);
+
         TenthSecondDigit.SetFloat("OffsetTime", 1.0f - (time * 10 % 10 / 10.0f));
+        TenthSecondDigit.Play(0, -1, 0);
+
         HundredthSecondDigit.SetFloat("OffsetTime", 1.0f - (time * 100 % 10 / 10.0f));
+        HundredthSecondDigit.Play(0, -1, 0);
+
+
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+        }
         coroutine = StartCoroutine(TimerCoroutine(time));
     }
-
 
     public void StopTimer()
     {
         TenSecondDigit.enabled = false;
+        TenSecondDigit.playbackTime = 0;
+
         SecondDigit.enabled = false;
+        TenSecondDigit.playbackTime = 0;
+
         TenthSecondDigit.enabled = false;
+        TenSecondDigit.playbackTime = 0;
+
         HundredthSecondDigit.enabled = false;
+        TenSecondDigit.playbackTime = 0;
+
         ColonDigit.enabled = false;
-        StopCoroutine(coroutine);
+        TenSecondDigit.playbackTime = 0;
+
     }
+
     // need to make a public function that says how much time the clock starts at, using the systemTime, or Time.time, or systemdelta, then every update, you add the delta time to the total (this will give you how much time has elapsed.
     // need the private variable lcdcontroller uses, and the function call that returns that, and in the update function, you increase the thing by the delta time
     IEnumerator TimerCoroutine(float time)
@@ -60,11 +83,5 @@ public class LCDController : MonoBehaviour
         yield return new WaitForSeconds(time);
         StopTimer();
         timerExpireEvent.Invoke();
-    }
-    public void subtractTime(float time, float change)
-    {
-        StopCoroutine(coroutine);
-        TenSecondDigit.SetFloat("OffsetTime", 1.0f - (time / 100f));
-        coroutine = StartCoroutine(TimerCoroutine(change));
     }
 }
