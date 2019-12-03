@@ -50,7 +50,6 @@ public class GameState : MonoBehaviour
     public float restart = 1f;
     private float timer = 0.0f;
     private float levelStartTime = 0.0f;
-    private float newStartTime = 0.0f;
 
     private List<GameObject> wires = new List<GameObject>();
 
@@ -74,8 +73,7 @@ public class GameState : MonoBehaviour
         currMaxVelocity = initMaxVelocity;
 
         levelNumber++;
-        levelStartTime = Mathf.Min(90, 30 + 1.5f * levelNumber-1);
-        newStartTime = levelStartTime;
+        levelStartTime = Mathf.Min(99, 30 + 1.5f * (levelNumber - 1));
         timer = 0;
 
         foreach (var node in allNodes)
@@ -113,16 +111,11 @@ public class GameState : MonoBehaviour
 
     public void LevelWon()
     {
-        Debug.Log("Level Complete!");
         lcdController.StopTimer();
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
-        Debug.Log("This is the lcdcontroller initial time: "+ levelStartTime);
-        Debug.Log("This is the time.deltatime variable"+ Time.deltaTime);
-        Debug.Log("this is the score variable before:" + score);
         
         score += (int)Mathf.Round((levelStartTime - timer)*100);
-        Debug.Log("This is the score variable after:" + score);
         scoreText.text = "Score: " + score.ToString();
 
         foreach (var wire in wires)
@@ -136,7 +129,6 @@ public class GameState : MonoBehaviour
 
     public void GameOver()
     {
-        Debug.Log("Failure!");
         lcdController.StopTimer();
         uiManager.SwitchLose();
         endScoreText.text = "Total Score: " + score.ToString();
@@ -146,7 +138,6 @@ public class GameState : MonoBehaviour
     public void RestartGame()
     {
         Score.scoreValue = 0;
-        Debug.Log("Restarting game...");
         Invoke("Restart", restart);
     }
 
@@ -305,12 +296,14 @@ public class GameState : MonoBehaviour
     //I think this is working but idk how to correctly subtract time in the LCDController
     public void Jumper(GameObject jumper)
     {
+
+        Debug.Log(timer);
         if(levelStartTime - timer > 10)
         {
-            lcdController.subtractTime(newStartTime - 10, levelStartTime - timer - 10);
-            newStartTime -= 10;
             timer += 10;
-        } else
+            lcdController.SetTimer(levelStartTime - timer);
+        }
+        else
         {
             GameOver();
         }
