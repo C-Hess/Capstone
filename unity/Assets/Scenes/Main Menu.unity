@@ -758,7 +758,7 @@ MonoBehaviour:
     in case you mess up and cut the wrong wire. Pressing the wire will move you from
     your current state to the state of the buttons color at the cost of -10 seconds
 
-    - Your goal is to defuse as many bombs as possible to and get the highest score
+    - Your goal is to defuse as many bombs as possible to get the highest score
     possible
 
     - Levels increase in difficulty'
