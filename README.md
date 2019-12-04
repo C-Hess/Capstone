@@ -1,4 +1,4 @@
-# 4 Ninjas Learn Grammar
+# Defusing a bomb using a visualization of a state machine
 
 This is an early prototype game to help educate computer science students on the concepts of programming languages. The main goal of the game is to diffuse the bomb before the time runs out. To diffuse the bomb, the player must analyze a DFA to determine the right order to cut the bomb wires. This process is nearly identical to the process of determining if a given string satisfies a grammar (DFA)
 
