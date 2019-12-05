@@ -4,3 +4,5 @@ This is an early prototype game to help educate computer science students on the
 
 ## Run instructions
 To run the game, simply open the `unity/` folder in Unity and hit the play button, open the main menu scene found in the `assets/scenes` folder and hit the **play** button. Eventually, the project should eventually be built to support html5 webGL so that it can be played in the web browser
+
+Deployed web-based version located: https://kylejsmith12.github.io/DontBlowIt/WebGLCapstone/
