@@ -74,6 +74,10 @@ public class LCDController : MonoBehaviour
         ColonDigit.enabled = false;
         TenSecondDigit.playbackTime = 0;
 
+        if(coroutine != null)
+        {
+            StopCoroutine(coroutine);
+        }
     }
 
     // need to make a public function that says how much time the clock starts at, using the systemTime, or Time.time, or systemdelta, then every update, you add the delta time to the total (this will give you how much time has elapsed.
