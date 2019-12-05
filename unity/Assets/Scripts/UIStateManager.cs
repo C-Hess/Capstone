@@ -35,6 +35,11 @@ public class UIStateManager : MonoBehaviour
         }
     }
 
+    public UIStates GetState()
+    {
+        return currentUIState;
+    }
+
     public void SwitchGame()
     {
         currentUIState = UIStates.GAME;
