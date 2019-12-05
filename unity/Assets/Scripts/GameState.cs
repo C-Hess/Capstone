@@ -258,12 +258,49 @@ public class GameState : MonoBehaviour
             allNodes[n1].transform.localPosition += Mathf.Min(velocities[n1].magnitude, currMaxVelocity) * velocities[n1].normalized;
         }
 
-        foreach (DFAEdge e in allEdges)
+
+        HashSet<DFANode> nodesTraversed = new HashSet<DFANode>();
+
+        foreach (DFANode n in allNodes)
         {
-            if (e != null)
+
+            float delta = 0.0f;
+
+            var edgesSortedByParentNodeRefHash = n.edges.OrderBy(x => {
+                DFANode otherNode = x.parent;
+                if (otherNode == n)
+                {
+                    otherNode = x.child;
+                }
+                return otherNode.GetHashCode();
+             }).ToList();
+
+            DFANode currentNode = null;
+
+            foreach(DFAEdge e in n.edges)
             {
-                RerenderEdge(e);
+                DFANode otherNode = e.parent;
+
+                if(otherNode == n)
+                {
+                    otherNode = e.child;
+                }
+
+                if(currentNode != otherNode)
+                {
+                    delta = 0;
+                    currentNode = otherNode;
+                }
+
+                if (!nodesTraversed.Contains(otherNode))
+                {
+                    RerenderEdge(e, delta);
+                    delta = -delta + (Mathf.Abs(delta) + 15);
+                }
+
             }
+
+            nodesTraversed.Add(n);
         }
 
         currMaxVelocity *= 0.9925f;
@@ -409,7 +446,7 @@ public class GameState : MonoBehaviour
         return edge;
     }
 
-    public void RerenderEdge(DFAEdge edge)
+    public void RerenderEdge(DFAEdge edge, float delta)
     {
         var parent = edge.parent;
         var child = edge.child;
@@ -417,12 +454,15 @@ public class GameState : MonoBehaviour
         var parentPos = parent.gameObject.transform.localPosition;
         var childPos = child.gameObject.transform.localPosition;
 
+        var normVect = -new Vector3((parentPos.y - childPos.y), (parentPos.x - childPos.x), 0).normalized;
+        var offsetVect = normVect * delta;
+
         var edgeRectTrans = edge.gameObject.GetComponent<RectTransform>();
         edgeRectTrans.sizeDelta = new Vector2(Vector3.Distance(parentPos, childPos), 60);
 
         edge.gameObject.transform.rotation = Quaternion.Euler(-90, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, -parent.gameObject.transform.forward));
 
-        edge.transform.localPosition = (parentPos + childPos) / 2;
+        edge.transform.localPosition = ((parentPos + childPos) / 2) + offsetVect;
     }
 
     private void ResetVisited()
