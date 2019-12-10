@@ -114,7 +114,6 @@ public class GameState : MonoBehaviour
         lcdController.StopTimer();
         uiManager.SwitchWin();
         levelNumberText.text = "Level " + (levelNumber).ToString() + " Completed!";
-        
         score += (int)Mathf.Round((levelStartTime - timer)*100);
         scoreText.text = "Score: " + score.ToString();
 
@@ -313,54 +312,56 @@ public class GameState : MonoBehaviour
      */
     public void Traverse(GameObject wire)
     {
-        currentPosition.IsCurrent = false;
-        currentPosition = currentPosition.NextNode(wire.GetComponent<DFAWire>().color);
-        if (currentPosition == null)
+        if (uiManager.GetState() == UIStateManager.UIStates.GAME)
         {
-            GameOver();
-        }
-        else
-        {
-            currentPosition.IsCurrent = true;
-            if (currentPosition == endNode)
+            currentPosition.IsCurrent = false;
+            currentPosition = currentPosition.NextNode(wire.GetComponent<DFAWire>().color);
+            if (currentPosition == null)
             {
-                LevelWon();
+                GameOver();
+            }
+            else
+            {
+                currentPosition.IsCurrent = true;
+                if (currentPosition == endNode)
+                {
+                    LevelWon();
+                }
             }
         }
-
     }
 
     //I think this is working but idk how to correctly subtract time in the LCDController
     public void Jumper(GameObject jumper)
     {
 
-        Debug.Log(timer);
-        if(levelStartTime - timer > 10)
+        if (uiManager.GetState() == UIStateManager.UIStates.GAME)
         {
-            timer += 10;
-            lcdController.SetTimer(levelStartTime - timer);
-        }
-        else
-        {
-            GameOver();
-        }
-
-        currentPosition.IsCurrent = false;
-        currentPosition = currentPosition.NextNode(jumper.GetComponent<JumperColor>().color);
-        if (currentPosition == null)
-        {
-            GameOver();
-        }
-        else
-        {
-            currentPosition.IsCurrent = true;
-            if (currentPosition == endNode)
+            if (levelStartTime - timer > 10)
             {
-                LevelWon();
+                timer += 10;
+                lcdController.SetTimer(levelStartTime - timer);
+            }
+            else
+            {
+                GameOver();
+            }
+
+            currentPosition.IsCurrent = false;
+            currentPosition = currentPosition.NextNode(jumper.GetComponent<JumperColor>().color);
+            if (currentPosition == null)
+            {
+                GameOver();
+            }
+            else
+            {
+                currentPosition.IsCurrent = true;
+                if (currentPosition == endNode)
+                {
+                    LevelWon();
+                }
             }
         }
-        
-
     }
 
 
