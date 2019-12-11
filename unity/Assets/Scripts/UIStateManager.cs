@@ -34,12 +34,20 @@ public class UIStateManager : MonoBehaviour
                 break;
         }
     }
-
+    /**
+        * This method is called to signify what state the game is currently in such as the win state, lose state, or game state
+        * 
+        * @param 
+        */
     public UIStates GetState()
     {
         return currentUIState;
     }
-
+    /**
+        * This method switches the gamesceen to active and sets the win and lose screen to false so they do not appear
+        * 
+        * @param 
+        */
     public void SwitchGame()
     {
         currentUIState = UIStates.GAME;
@@ -47,6 +55,11 @@ public class UIStateManager : MonoBehaviour
         winScreen.SetActive(false);
         loseScreen.SetActive(false);
     }
+    /**
+        * This method switches the lose screen to true so that it does appear, and sets the gamescreen and win screen to false so that they do not appear
+        * 
+        * @param 
+        */
     public void SwitchLose()
     {
         currentUIState = UIStates.LOSE;
@@ -54,6 +67,11 @@ public class UIStateManager : MonoBehaviour
         winScreen.SetActive(false);
         loseScreen.SetActive(true);
     }
+    /**
+        * This method switches the win screen to true so that it does appear, and it sets the game screen and lose screen to false so they do not appear
+        * 
+        * @param 
+        */
     public void SwitchWin()
     {
         currentUIState = UIStates.WIN;

@@ -18,6 +18,12 @@ public class MoveObject : MonoBehaviour
     {
         
     }
+    /**
+    * This method checks to see if the mouse is down or clicked, if it is, it sets the gravity to false, makes it kinematic so that it can move
+    * it allows the object to rotate
+    * 
+    * @param 
+    */
     void OnMouseDown()
     {
         item.GetComponent<Rigidbody>().useGravity = false;
@@ -26,6 +32,11 @@ public class MoveObject : MonoBehaviour
         item.transform.rotation = guide.transform.rotation;
         item.transform.parent = tempParent.transform;
     }
+    /**
+        * This method checks to see if the mouse is up or not clicked, if it is, it sets the gravity to true, makes the object non-kinematic, so that it does not move
+        * 
+        * @param 
+        */
     void OnMouseUp()
     {
         item.GetComponent<Rigidbody>().useGravity = true;

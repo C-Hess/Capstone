@@ -18,13 +18,22 @@ public class BombCameraController : MonoBehaviour
     private float zoomGoal = 0;
     private Vector3 posDir = Vector3.zero;
 
-
+    /**
+    * This method sets the zoom goal to the camera focal length at the start
+    * 
+    * @param localPosition
+    */
     void Start()
     {
         zoomGoal = Camera.main.focalLength;
     }
 
     // Update is called once per frame
+    /**
+    * This method updates every frame and changes the camera position based on where the user decides using their mouse position
+    * 
+    * @param 
+    */
     void Update()
     {
         if (Input.mouseScrollDelta.magnitude > 0.0001f)

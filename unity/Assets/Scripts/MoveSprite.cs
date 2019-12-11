@@ -27,7 +27,11 @@ public class MoveSprite : MonoBehaviour
 
         transform.position += (Vector3)(direction * Speed * Time.fixedDeltaTime);
     }
-
+    /**
+        * This method updates the sprite so that it moves on the dfa
+        * 
+        * @param 
+        */
     public void UpdateDesition()
     {
         if (Vector2.Distance(transform.position, CurrentGoal) <= 1.0)

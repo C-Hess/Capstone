@@ -42,6 +42,11 @@ namespace DFAGraph
         public List<DFAEdge> edges = new List<DFAEdge>();
 
         //When you cut a wire, call currentPosition.Traverse(wire)
+        /**
+        * This method determins the next node that the current node should move to, based on the wire cut
+        * 
+        * @param wireColor - the color of the wire 
+        */
         public DFANode NextNode(string wireColor)
         {
             string outputStr = "Options: \n";
@@ -68,7 +73,11 @@ namespace DFAGraph
             //Don't know if we want an error state node or just return null
             return null;
         }
-
+        /**
+        * This method checks to see if the node has an edge
+        * 
+        * @param strColor - the color
+        */
         public bool HasEdge(string strColor)
         {
             foreach (DFAEdge edge in edges)
@@ -78,7 +87,11 @@ namespace DFAGraph
             }
             return false;
         }
-
+        /**
+        * This method checks to see if there are any outgoing edges
+        * 
+        * @param 
+        */
         public bool HasOutgoingEdge(string color)
         {
             foreach (DFAEdge edge in edges)
@@ -89,7 +102,11 @@ namespace DFAGraph
             return false;
         }
 
-
+        /**
+        * This method gets the child nodes
+        * 
+        * @param 
+        */
         public IEnumerable<DFANode> GetChildNodes()
         {
             return edges.Select(x => x.child);
