@@ -55,6 +55,12 @@ public class GameState : MonoBehaviour
 
 
     // Start is called before the first frame update
+     /**
+     * This method calls the next level function
+     * it has a for loop to instantiate the jumper wires so that there are 6 created, and gives them all separate colors
+     * 
+     * @param none
+     */
     void Start()
     {
         NextLevel();
@@ -66,7 +72,18 @@ public class GameState : MonoBehaviour
             newJumper.GetComponent<JumperColor>().color = allWireColors[i].label;
         }
     }
-
+    /**
+    * This method destroys all the prior objects from the previous level such as nodes and edges of the dfa
+    * it increases the timer by 1.5 seconds each level from the base of 30 seconds
+    * it generates by calling the generate level function, which is given the level number and the amount of mutations per level
+    * it sets the start node to the 0th node
+    * it sets the end node to the 6th node
+    * it sets the end node to color red to signify it is the end node
+    * it calculates the edges based on a minimal path to traverse the DFA
+    * and then it instantiates new wires to go along the new level
+    * then it gives the lcd controller the new start time
+    * @param  none
+    */
     public void NextLevel()
     {
         uiManager.SwitchGame();
@@ -108,7 +125,16 @@ public class GameState : MonoBehaviour
 
         lcdController.SetTimer(levelStartTime);
     }
-
+    /**
+    * This method is called if the level is won
+    * it stops the lcd timer
+    * it toggles the win screen to show the user their score and prompt them to move on to the next level
+    * it states which level was completed, and it increments the score based off the time remaining from the level multiplied by 100 and added to the total score
+    * it outputs the score on the ui screen
+    * it destroys and clears the wires
+    * 
+    * @param 
+    */
     public void LevelWon()
     {
         lcdController.StopTimer();
@@ -125,7 +151,14 @@ public class GameState : MonoBehaviour
         wires.Clear();
 
     }
-
+    /**
+    * This method is called if the user loses on their current level
+    * it toggles the ui screen to the lose screen
+    * It states the total score that the user achieved on their run and outputs it
+    * it states what level that they reached
+    * 
+    * @param 
+    */
     public void GameOver()
     {
         lcdController.StopTimer();
@@ -133,24 +166,44 @@ public class GameState : MonoBehaviour
         endScoreText.text = "Total Score: " + score.ToString();
         endLevelNumberText.text = "Level " + (levelNumber).ToString() + " Failed.";
     }
-
+    /**
+    * This method is called when the user wants to restart the game, it sets the score back to 0, and invokes restart
+    * 
+    * @param 
+    */
     public void RestartGame()
     {
         Score.scoreValue = 0;
         Invoke("Restart", restart);
     }
-
+    /**
+    * This method is called when the user wants to restart the game, it has the scene manager load the level 1 scene
+    * 
+    * @param 
+    */
     void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
+    /**
+    * This method is called when the user wants to access the main menu
+    * 
+    * @param 
+    */
     public void MainMenu()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 
     // Update is called once per frame
+    /**
+    * This method sets the timer variable to be equal to the timer variable plus the delta time, which is calculated each frame, to account for users with slow computers
+    * every frame, it will send a ray cast, from the users mouse to where it is located on in the scene, if the ray hits a selectable object or a jumper cable, it will light up yellow
+    * if the jumper is clicked on, it will call the jumper function, if the wire is clicked on, the current node of the dfa will traverse to whatever state corresponds to the wire that was cut
+    * the wire's "set active" will be set to false, hiding the wire from the scene.
+    * 
+    * @param 
+    */
     void Update()
     {
         timer += Time.deltaTime;
@@ -332,6 +385,12 @@ public class GameState : MonoBehaviour
     }
 
     //I think this is working but idk how to correctly subtract time in the LCDController
+    /**
+    * This method takes the input on if the jumper wire was clicked on, if it was, then it subtracts 10 seconds from the timer if there is more than 10 seconds left on the timer
+    * if there is less than 10 seconds left on the timer, it triggers the gameover function, due to there not being enough time left
+    * 
+    * @param jumper - the jumper wire that is clicked on
+    */
     public void Jumper(GameObject jumper)
     {
 
@@ -364,7 +423,11 @@ public class GameState : MonoBehaviour
         }
     }
 
-
+    /**
+    * This method finds a minimal path from the start state to the ends state of the DFA
+    * 
+    * @param 
+    */
     public List<DFAEdge> FindMinPath()
     {
         ResetVisited();
@@ -415,7 +478,11 @@ public class GameState : MonoBehaviour
 
         return edgesForPath;
     }
-
+    /**
+    * This method spawns the nodes for the DFA
+    * 
+    * @param localPosition
+    */
     public DFANode SpawnNode(Vector3 localPosition)
     {
         var newObj = Instantiate(this.dfaNodePrefab, canvas.transform);
@@ -423,7 +490,17 @@ public class GameState : MonoBehaviour
         allNodes.Add(newObj.GetComponent<DFANode>());
         return newObj.GetComponent<DFANode>();
     }
-
+    /**
+    * This method spawns the edges corresponding to the DFA that was generated
+    * 
+    * @param parent
+    * 
+    * @param child
+    * 
+    * @param color
+    * 
+    * @param colorName
+    */
     public DFAEdge SpawnEdge(DFANode parent, DFANode child, Color color, string colorName)
     {
         var newObj = Instantiate(this.dfaEdgePrefab, canvas.transform);
@@ -446,7 +523,13 @@ public class GameState : MonoBehaviour
         allEdges.Add(edge);
         return edge;
     }
-
+    /**
+    * This method  renders the edges in the game space
+    * 
+    * @param edge
+    * 
+    * @param delta
+    */
     public void RerenderEdge(DFAEdge edge, float delta)
     {
         var parent = edge.parent;
@@ -465,7 +548,11 @@ public class GameState : MonoBehaviour
         edge.gameObject.transform.rotation = Quaternion.Euler(-90, 0, Vector3.SignedAngle(parentPos - childPos, parent.gameObject.transform.right, -parent.gameObject.transform.forward));
         edge.transform.localPosition = ((parentPos + childPos) / 2) + (Vector3)offsetVect;
     }
-
+    /**
+    * This method sets all the visited nodes to false
+    * 
+    * @param localPosition
+    */
     private void ResetVisited()
     {
         foreach (var node in allNodes)
@@ -473,7 +560,13 @@ public class GameState : MonoBehaviour
             node.Visited = false;
         }
     }
-
+    /**
+    * This method generates the level, given the input of the level, and the amount of mutations there should be per level
+    * 
+    * @param level - the level that the user is on
+    * 
+    * @param mutationsPerLevel - the amount of mutations alloted for the specific level
+    */
     public void GenerateLevel(int level, int mutationsPerLevel)
     {
 
@@ -528,6 +621,13 @@ public class GameState : MonoBehaviour
         
         mutateLevel(level, mutationsPerLevel);
     }
+    /**
+    * This method does the mutations per the level
+    * 
+    * @param level - the current level
+    * 
+    * @param mutationsPerLevel - the amount of mutations needed per level
+    */
     public void mutateLevel(int level, int mutationsPerLevel)
     {
         Color blue = allWireColors[0].color;

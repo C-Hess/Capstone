@@ -21,6 +21,7 @@ public class LCDController : MonoBehaviour
     private Coroutine coroutine = null;
 
     // Start is called before the first frame update
+  
     void Start()
     {
         TenSecondDigit.SetFloat("TimeMultiplier", 0.01f);
@@ -28,7 +29,11 @@ public class LCDController : MonoBehaviour
         TenthSecondDigit.SetFloat("TimeMultiplier", 1f);
         HundredthSecondDigit.SetFloat("TimeMultiplier", 10f);
     }
-
+    /**
+    * This method takes the time, and sets each digit in the lcd screen to the corresponding timer
+    * 
+    * @param time - the time variable
+    */
     public void SetTimer(float time)
     {
         TenSecondDigit.enabled = true;
@@ -56,7 +61,11 @@ public class LCDController : MonoBehaviour
         }
         coroutine = StartCoroutine(TimerCoroutine(time));
     }
-
+    /**
+        * This method stops the timer on the lcd panel
+        * 
+        * @param 
+        */
     public void StopTimer()
     {
         TenSecondDigit.enabled = false;
@@ -82,6 +91,11 @@ public class LCDController : MonoBehaviour
 
     // need to make a public function that says how much time the clock starts at, using the systemTime, or Time.time, or systemdelta, then every update, you add the delta time to the total (this will give you how much time has elapsed.
     // need the private variable lcdcontroller uses, and the function call that returns that, and in the update function, you increase the thing by the delta time
+    /**
+        * This method waits to see if the timer should stop, it stops time timer, and then invokes the timer expire event to trigger
+        * 
+        * @param 
+        */
     IEnumerator TimerCoroutine(float time)
     {
         yield return new WaitForSeconds(time);
