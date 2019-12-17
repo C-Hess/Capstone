@@ -1,0 +1,88 @@
+\hypertarget{class_player_controller}{}\doxysection{Player\+Controller Class Reference}
+\label{class_player_controller}\index{PlayerController@{PlayerController}}
+Inheritance diagram for Player\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_player_controller}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_player_controller_abb12e85ca1b12efdbc8684bff2e19c4c}\label{class_player_controller_abb12e85ca1b12efdbc8684bff2e19c4c}} 
+float {\bfseries move\+Speed} = 0.\+5f
+\item 
+\mbox{\Hypertarget{class_player_controller_acc374fff1c2bf2ef2330d057c20ff681}\label{class_player_controller_acc374fff1c2bf2ef2330d057c20ff681}} 
+float {\bfseries zoom\+Speed} = 4.\+0f
+\item 
+\mbox{\Hypertarget{class_player_controller_a89c6b3e26bd340ef1fc0061e86d0a326}\label{class_player_controller_a89c6b3e26bd340ef1fc0061e86d0a326}} 
+float {\bfseries focal\+Max} = 25.\+0f
+\item 
+\mbox{\Hypertarget{class_player_controller_aba7b26c01a62d035249371e1275e41c8}\label{class_player_controller_aba7b26c01a62d035249371e1275e41c8}} 
+float {\bfseries focal\+Min} = 15.\+0f
+\item 
+\mbox{\Hypertarget{class_player_controller_acec914241f4e040fb783620ce78fc330}\label{class_player_controller_acec914241f4e040fb783620ce78fc330}} 
+int {\bfseries scroll\+Margin} = 30
+\item 
+\mbox{\Hypertarget{class_player_controller_a7b8b16f91f4d248727bee11dc735fe1a}\label{class_player_controller_a7b8b16f91f4d248727bee11dc735fe1a}} 
+float {\bfseries minX} = 0
+\item 
+\mbox{\Hypertarget{class_player_controller_afc1262b95da1e8a5b7e486c892a23c83}\label{class_player_controller_afc1262b95da1e8a5b7e486c892a23c83}} 
+float {\bfseries maxX} = 100f
+\item 
+\mbox{\Hypertarget{class_player_controller_a9a505e233faedb270379a2a783cc4905}\label{class_player_controller_a9a505e233faedb270379a2a783cc4905}} 
+float {\bfseries minZ} = 0
+\item 
+\mbox{\Hypertarget{class_player_controller_ad00cc55140a96e43222e3edb49f07cfe}\label{class_player_controller_ad00cc55140a96e43222e3edb49f07cfe}} 
+float {\bfseries maxZ} = 100f
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_player_controller_ae1117d9c4da3193181cddad2c814e467}{Start}} ()
+\item 
+void \mbox{\hyperlink{class_player_controller_ae8bc83dffb99867a04be016473ed2c43}{Update}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_player_controller_a2cdf841b0eaa22c98c2a0c444ad7bf88}\label{class_player_controller_a2cdf841b0eaa22c98c2a0c444ad7bf88}} 
+float {\bfseries zoom\+Goal} = 0
+\item 
+\mbox{\Hypertarget{class_player_controller_afa49fd1d1a63458d83d35e3616b885f8}\label{class_player_controller_afa49fd1d1a63458d83d35e3616b885f8}} 
+Vector3 {\bfseries pos\+Dir} = Vector3.\+zero
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_player_controller_ae1117d9c4da3193181cddad2c814e467}\label{class_player_controller_ae1117d9c4da3193181cddad2c814e467}} 
+\index{PlayerController@{PlayerController}!Start@{Start}}
+\index{Start@{Start}!PlayerController@{PlayerController}}
+\doxysubsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void Player\+Controller.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+This method sets the zoom goal to the camera focal length at the start
+
+
+\begin{DoxyParams}{Parameters}
+{\em local\+Position} & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_player_controller_ae8bc83dffb99867a04be016473ed2c43}\label{class_player_controller_ae8bc83dffb99867a04be016473ed2c43}} 
+\index{PlayerController@{PlayerController}!Update@{Update}}
+\index{Update@{Update}!PlayerController@{PlayerController}}
+\doxysubsubsection{\texorpdfstring{Update()}{Update()}}
+{\footnotesize\ttfamily void Player\+Controller.\+Update (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+This method updates every frame and changes the camera position based on where the user decides using their mouse position
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/kylej/\+Documents/\+Capstone/unity/\+Assets/\+Scripts/Player\+Controller.\+cs\end{DoxyCompactItemize}
