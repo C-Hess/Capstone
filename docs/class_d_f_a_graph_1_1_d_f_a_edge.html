@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.16"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>CapstoneDoxygen: DFAGraph.DFAEdge Class Reference</title>
+<title>Capstone: DFAGraph.DFAEdge Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">CapstoneDoxygen
+   <div id="projectname">Capstone
    </div>
   </td>
  </tr>
@@ -83,15 +83,15 @@ Inheritance diagram for DFAGraph.DFAEdge:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5d15306ca7b88e11ab602ecc8eaa2e25"><td class="memItemLeft" align="right" valign="top"><a id="a5d15306ca7b88e11ab602ecc8eaa2e25"></a>
-Color&#160;</td><td class="memItemRight" valign="bottom"><b>GetColor</b> ()</td></tr>
+<tr class="memitem:a5d15306ca7b88e11ab602ecc8eaa2e25"><td class="memItemLeft" align="right" valign="top">Color&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_f_a_graph_1_1_d_f_a_edge.html#a5d15306ca7b88e11ab602ecc8eaa2e25">GetColor</a> ()</td></tr>
 <tr class="separator:a5d15306ca7b88e11ab602ecc8eaa2e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a755ba9f8c63ff7eeea068dea69ec13dd"><td class="memItemLeft" align="right" valign="top"><a id="a755ba9f8c63ff7eeea068dea69ec13dd"></a>
-string&#160;</td><td class="memItemRight" valign="bottom"><b>GetColorStr</b> ()</td></tr>
+<tr class="memitem:a755ba9f8c63ff7eeea068dea69ec13dd"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_f_a_graph_1_1_d_f_a_edge.html#a755ba9f8c63ff7eeea068dea69ec13dd">GetColorStr</a> ()</td></tr>
 <tr class="separator:a755ba9f8c63ff7eeea068dea69ec13dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10df9f7d3c7950731fc893e78dabb367"><td class="memItemLeft" align="right" valign="top"><a id="a10df9f7d3c7950731fc893e78dabb367"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>SetColor</b> (Color value, string strName)</td></tr>
+<tr class="memitem:a10df9f7d3c7950731fc893e78dabb367"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_f_a_graph_1_1_d_f_a_edge.html#a10df9f7d3c7950731fc893e78dabb367">SetColor</a> (Color value, string strName)</td></tr>
 <tr class="separator:a10df9f7d3c7950731fc893e78dabb367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acef73ebd4273d187704cef10b22304a3"><td class="memItemLeft" align="right" valign="top"><a id="acef73ebd4273d187704cef10b22304a3"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>SetColor</b> (<a class="el" href="class_game_state_1_1_wire_color.html">GameState.WireColor</a> wireColor)</td></tr>
+<tr class="separator:acef73ebd4273d187704cef10b22304a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -108,6 +108,90 @@ Private Attributes</h2></td></tr>
 string&#160;</td><td class="memItemRight" valign="bottom"><b>colorName</b></td></tr>
 <tr class="separator:aee596cb6e265e5256cfc77c02f3a80e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5d15306ca7b88e11ab602ecc8eaa2e25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d15306ca7b88e11ab602ecc8eaa2e25">&#9670;&nbsp;</a></span>GetColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color DFAGraph.DFAEdge.GetColor </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This method gets the color of the dfa edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">none</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a755ba9f8c63ff7eeea068dea69ec13dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a755ba9f8c63ff7eeea068dea69ec13dd">&#9670;&nbsp;</a></span>GetColorStr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string DFAGraph.DFAEdge.GetColorStr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This method gets the color of the edge</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a10df9f7d3c7950731fc893e78dabb367"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10df9f7d3c7950731fc893e78dabb367">&#9670;&nbsp;</a></span>SetColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DFAGraph.DFAEdge.SetColor </td>
+          <td>(</td>
+          <td class="paramtype">Color&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string&#160;</td>
+          <td class="paramname"><em>strName</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This method sets the color</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname"></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>C:/Users/kylej/Documents/Capstone/unity/Assets/Scripts/DFAEdge.cs</li>
 </ul>

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['selectionmanager_33',['SelectionManager',['../class_selection_manager.html',1,'']]]
+  ['score_58',['Score',['../class_score.html',1,'']]],
+  ['selectionmanager_59',['SelectionManager',['../class_selection_manager.html',1,'']]]
 ];

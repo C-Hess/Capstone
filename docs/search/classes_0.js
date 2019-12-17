@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bombcameracontroller_19',['BombCameraController',['../class_bomb_camera_controller.html',1,'']]]
+  ['bombwire_49',['BombWire',['../class_bomb_wire.html',1,'']]]
 ];

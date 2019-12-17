@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gamescore_6',['GameScore',['../class_game_score.html',1,'']]],
-  ['gamestate_7',['GameState',['../class_game_state.html',1,'']]]
+  ['exitgame_4',['ExitGame',['../class_main_menu.html#acde01c79443ef44e82d129f32a525952',1,'MainMenu']]]
 ];
