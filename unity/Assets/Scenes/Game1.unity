@@ -661,7 +661,7 @@ MonoBehaviour:
     label: black
   uiManager: {fileID: 150253564}
   lcdController: {fileID: 1191761420}
-  mutationsPerLevel: 10
+  mutationsPerLevel: 2
   levelNumber: 0
   levelNumberText: {fileID: 1742084684}
   score: 0
