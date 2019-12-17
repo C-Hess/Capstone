@@ -1,0 +1,109 @@
+\hypertarget{class_u_i_state_manager}{}\doxysection{U\+I\+State\+Manager Class Reference}
+\label{class_u_i_state_manager}\index{UIStateManager@{UIStateManager}}
+Inheritance diagram for U\+I\+State\+Manager\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_u_i_state_manager}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_u_i_state_manager_ab9be856457acb4ecd23ab5e0901e10a5}\label{class_u_i_state_manager_ab9be856457acb4ecd23ab5e0901e10a5}} 
+enum {\bfseries U\+I\+States} \{ {\bfseries G\+A\+ME}, 
+{\bfseries W\+IN}, 
+{\bfseries L\+O\+SE}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+U\+I\+States \mbox{\hyperlink{class_u_i_state_manager_a0fc822259ed1734fb4030c6f4d900a76}{Get\+State}} ()
+\item 
+void \mbox{\hyperlink{class_u_i_state_manager_a4f96f46d48d378eea0745f49d555e0a8}{Switch\+Game}} ()
+\item 
+void \mbox{\hyperlink{class_u_i_state_manager_a3a535ccc5be9e9d796464f7b31231196}{Switch\+Lose}} ()
+\item 
+void \mbox{\hyperlink{class_u_i_state_manager_a4fa9ff87065d3d8ffd153e62c11b98eb}{Switch\+Win}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_u_i_state_manager_acad9c2283efc367d0e41c4deedc5e7e3}\label{class_u_i_state_manager_acad9c2283efc367d0e41c4deedc5e7e3}} 
+U\+I\+States {\bfseries current\+U\+I\+State} = U\+I\+States.\+G\+A\+ME
+\item 
+\mbox{\Hypertarget{class_u_i_state_manager_aeb3f60b194f3e3135bf7cd258ff5a13d}\label{class_u_i_state_manager_aeb3f60b194f3e3135bf7cd258ff5a13d}} 
+Game\+Object {\bfseries win\+Screen}
+\item 
+\mbox{\Hypertarget{class_u_i_state_manager_a500316f26bd6e1e59687818a575ac95e}\label{class_u_i_state_manager_a500316f26bd6e1e59687818a575ac95e}} 
+Game\+Object {\bfseries lose\+Screen}
+\item 
+\mbox{\Hypertarget{class_u_i_state_manager_a75ba70e348e020bedb0d1e4daf5f53b6}\label{class_u_i_state_manager_a75ba70e348e020bedb0d1e4daf5f53b6}} 
+Game\+Object {\bfseries game\+Screen}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_u_i_state_manager_a03488a42dfc077fbf62315b16fa26fd7}\label{class_u_i_state_manager_a03488a42dfc077fbf62315b16fa26fd7}} 
+void {\bfseries Start} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_u_i_state_manager_a0fc822259ed1734fb4030c6f4d900a76}\label{class_u_i_state_manager_a0fc822259ed1734fb4030c6f4d900a76}} 
+\index{UIStateManager@{UIStateManager}!GetState@{GetState}}
+\index{GetState@{GetState}!UIStateManager@{UIStateManager}}
+\doxysubsubsection{\texorpdfstring{GetState()}{GetState()}}
+{\footnotesize\ttfamily U\+I\+States U\+I\+State\+Manager.\+Get\+State (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This method is called to signify what state the game is currently in such as the win state, lose state, or game state
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_u_i_state_manager_a4f96f46d48d378eea0745f49d555e0a8}\label{class_u_i_state_manager_a4f96f46d48d378eea0745f49d555e0a8}} 
+\index{UIStateManager@{UIStateManager}!SwitchGame@{SwitchGame}}
+\index{SwitchGame@{SwitchGame}!UIStateManager@{UIStateManager}}
+\doxysubsubsection{\texorpdfstring{SwitchGame()}{SwitchGame()}}
+{\footnotesize\ttfamily void U\+I\+State\+Manager.\+Switch\+Game (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This method switches the gamesceen to active and sets the win and lose screen to false so they do not appear
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_u_i_state_manager_a3a535ccc5be9e9d796464f7b31231196}\label{class_u_i_state_manager_a3a535ccc5be9e9d796464f7b31231196}} 
+\index{UIStateManager@{UIStateManager}!SwitchLose@{SwitchLose}}
+\index{SwitchLose@{SwitchLose}!UIStateManager@{UIStateManager}}
+\doxysubsubsection{\texorpdfstring{SwitchLose()}{SwitchLose()}}
+{\footnotesize\ttfamily void U\+I\+State\+Manager.\+Switch\+Lose (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This method switches the lose screen to true so that it does appear, and sets the gamescreen and win screen to false so that they do not appear
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_u_i_state_manager_a4fa9ff87065d3d8ffd153e62c11b98eb}\label{class_u_i_state_manager_a4fa9ff87065d3d8ffd153e62c11b98eb}} 
+\index{UIStateManager@{UIStateManager}!SwitchWin@{SwitchWin}}
+\index{SwitchWin@{SwitchWin}!UIStateManager@{UIStateManager}}
+\doxysubsubsection{\texorpdfstring{SwitchWin()}{SwitchWin()}}
+{\footnotesize\ttfamily void U\+I\+State\+Manager.\+Switch\+Win (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This method switches the win screen to true so that it does appear, and it sets the game screen and lose screen to false so they do not appear
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/kylej/\+Documents/\+Capstone/unity/\+Assets/\+Scripts/U\+I\+State\+Manager.\+cs\end{DoxyCompactItemize}

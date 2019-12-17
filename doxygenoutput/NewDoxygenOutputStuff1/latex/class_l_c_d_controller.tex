@@ -1,0 +1,97 @@
+\hypertarget{class_l_c_d_controller}{}\doxysection{L\+C\+D\+Controller Class Reference}
+\label{class_l_c_d_controller}\index{LCDController@{LCDController}}
+Inheritance diagram for L\+C\+D\+Controller\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_l_c_d_controller}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_l_c_d_controller_ac9d23b9bdba17a9670cc74630a287ab7}{Set\+Timer}} (float time)
+\item 
+void \mbox{\hyperlink{class_l_c_d_controller_a8d860c789424eb543522084da9711de4}{Stop\+Timer}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_a9b97c65777d2551bb73216379d6a462b}\label{class_l_c_d_controller_a9b97c65777d2551bb73216379d6a462b}} 
+Animator {\bfseries Ten\+Second\+Digit}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_adb5718087c9f24b67981ded1a75c81f2}\label{class_l_c_d_controller_adb5718087c9f24b67981ded1a75c81f2}} 
+Animator {\bfseries Second\+Digit}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_a4ad2f0aedd7e9f64cca5769231e030a4}\label{class_l_c_d_controller_a4ad2f0aedd7e9f64cca5769231e030a4}} 
+Animator {\bfseries Colon\+Digit}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_a9fb6aed27d6022a8ff72e27508d5260f}\label{class_l_c_d_controller_a9fb6aed27d6022a8ff72e27508d5260f}} 
+Animator {\bfseries Tenth\+Second\+Digit}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_a3d979423f76ac4f4d55f825eef890176}\label{class_l_c_d_controller_a3d979423f76ac4f4d55f825eef890176}} 
+Animator {\bfseries Hundredth\+Second\+Digit}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_ae697d809807c8276631daa2aff7a1720}\label{class_l_c_d_controller_ae697d809807c8276631daa2aff7a1720}} 
+\mbox{\hyperlink{class_timer_expire_event}{Timer\+Expire\+Event}} {\bfseries timer\+Expire\+Event}
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_a61898e1ef22fcfb612e48e3619d82681}\label{class_l_c_d_controller_a61898e1ef22fcfb612e48e3619d82681}} 
+void {\bfseries Start} ()
+\item 
+I\+Enumerator \mbox{\hyperlink{class_l_c_d_controller_ad739cba800a7fc4f46348bcbf2d3af44}{Timer\+Coroutine}} (float time)
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_l_c_d_controller_a271177e5458253939f64c31fa5b9eefc}\label{class_l_c_d_controller_a271177e5458253939f64c31fa5b9eefc}} 
+Coroutine {\bfseries coroutine} = null
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_l_c_d_controller_ac9d23b9bdba17a9670cc74630a287ab7}\label{class_l_c_d_controller_ac9d23b9bdba17a9670cc74630a287ab7}} 
+\index{LCDController@{LCDController}!SetTimer@{SetTimer}}
+\index{SetTimer@{SetTimer}!LCDController@{LCDController}}
+\doxysubsubsection{\texorpdfstring{SetTimer()}{SetTimer()}}
+{\footnotesize\ttfamily void L\+C\+D\+Controller.\+Set\+Timer (\begin{DoxyParamCaption}\item[{float}]{time }\end{DoxyParamCaption})}
+
+This method takes the time, and sets each digit in the lcd screen to the corresponding timer
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & -\/ the time variable \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_c_d_controller_a8d860c789424eb543522084da9711de4}\label{class_l_c_d_controller_a8d860c789424eb543522084da9711de4}} 
+\index{LCDController@{LCDController}!StopTimer@{StopTimer}}
+\index{StopTimer@{StopTimer}!LCDController@{LCDController}}
+\doxysubsubsection{\texorpdfstring{StopTimer()}{StopTimer()}}
+{\footnotesize\ttfamily void L\+C\+D\+Controller.\+Stop\+Timer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+This method stops the timer on the lcd panel
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_l_c_d_controller_ad739cba800a7fc4f46348bcbf2d3af44}\label{class_l_c_d_controller_ad739cba800a7fc4f46348bcbf2d3af44}} 
+\index{LCDController@{LCDController}!TimerCoroutine@{TimerCoroutine}}
+\index{TimerCoroutine@{TimerCoroutine}!LCDController@{LCDController}}
+\doxysubsubsection{\texorpdfstring{TimerCoroutine()}{TimerCoroutine()}}
+{\footnotesize\ttfamily I\+Enumerator L\+C\+D\+Controller.\+Timer\+Coroutine (\begin{DoxyParamCaption}\item[{float}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+This method waits to see if the timer should stop, it stops time timer, and then invokes the timer expire event to trigger
+
+
+\begin{DoxyParams}{Parameters}
+{\em } & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/kylej/\+Documents/\+Capstone/unity/\+Assets/\+Scripts/L\+C\+D\+Controller.\+cs\end{DoxyCompactItemize}
