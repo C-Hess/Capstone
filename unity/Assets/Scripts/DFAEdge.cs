@@ -33,8 +33,14 @@ namespace DFAGraph
         */
         public void SetColor(Color value, string strName)
         {
-            this.GetComponent<Image>().color = value;
-            this.colorName = strName;
+            GetComponent<Image>().color = value;
+            colorName = strName;
+        }
+
+        public void SetColor(GameState.WireColor wireColor)
+        {
+            GetComponent<Image>().color = wireColor.color;
+            colorName = wireColor.label;
         }
 
     }

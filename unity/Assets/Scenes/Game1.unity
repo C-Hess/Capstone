@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 177370910}
   - component: {fileID: 177370909}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: UI Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1220,7 +1220,7 @@ PrefabInstance:
     - target: {fileID: 7366100989368326994, guid: 0bbb3914a89081c48871c2edf66c4f31,
         type: 3}
       propertyPath: m_Name
-      value: Canvas (1)
+      value: DFA Render Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 7366100989368327007, guid: 0bbb3914a89081c48871c2edf66c4f31,
         type: 3}
