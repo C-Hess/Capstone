@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombCameraController : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
 
     public float moveSpeed = 0.5f;

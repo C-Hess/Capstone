@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DFAWire : MonoBehaviour
+public class BombWire : MonoBehaviour
 {
     public string color;
 }
